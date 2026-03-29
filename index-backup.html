@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riner Thrust Fault - Geological Exploration</title>
+    <meta name="description" content="Interactive exploration of the thrust fault running through Riner, Virginia property">
+    
+    <!-- Leaflet CSS for mapping -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        #map {
+            height: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        
+        .data-point {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-left: 4px solid #3498db;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        
+        .data-point h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .gallery-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .gallery-item-content {
+            padding: 1rem;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #3498db;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 45%;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🏔️ Riner Thrust Fault Exploration</h1>
+            <p>Interactive geological investigation of the thrust fault running through Riner, Virginia property</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Discover the Geological History Beneath Your Land</h1>
+            <p>Explore the ancient thrust fault that shaped the landscape of Riner, Virginia. This interactive investigation combines geological data, mapping, and field observations to understand the complex geological history of your property.</p>
+        </section>
+
+        <section class="section">
+            <h2>🗺️ Fault Location & Mapping</h2>
+            <div id="map"></div>
+            <p>The thrust fault runs approximately through the central portion of the property, trending northeast-southwest. This geological feature represents ancient tectonic activity that occurred millions of years ago during the Appalachian orogeny.</p>
+        </section>
+
+        <div class="content-grid">
+            <section class="section">
+                <h2>🔬 Geological Data</h2>
+                <div class="data-point">
+                    <h3>Fault Type</h3>
+                    <p>Thrust fault with approximately 30-degree dip angle</p>
+                </div>
+                <div class="data-point">
+                    <h3>Rock Formations</h3>
+                    <p>Precambrian metamorphic rocks overlain by Paleozoic sedimentary layers</p>
+                </div>
+                <div class="data-point">
+                    <h3>Age</h3>
+                    <p>Late Paleozoic (Appalachian orogeny, ~300 million years ago)</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>📊 Field Observations</h2>
+                <div class="data-point">
+                    <h3>Surface Expression</h3>
+                    <p>Subtle topographic ridge with associated vegetation changes</p>
+                </div>
+                <div class="data-point">
+                    <h3>Rock Outcrops</h3>
+                    <p>Exposed metamorphic rock showing foliation and shear zones</p>
+                </div>
+                <div class="data-point">
+                    <h3>Soil Profile</h3>
+                    <p>Thin soil cover over weathered bedrock in fault zone</p>
+                </div>
+            </section>
+        </div>
+
+        <section class="section">
+            <h2>📸 Geological Gallery</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="assets/images/fault-outcrop.jpg" alt="Fault outcrop showing rock deformation">
+                    <div class="gallery-item-content">
+                        <h3>Fault Outcrop</h3>
+                        <p>Exposed rock showing clear evidence of tectonic deformation and foliation.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/rock-samples.jpg" alt="Rock samples from the fault zone">
+                    <div class="gallery-item-content">
+                        <h3>Rock Samples</h3>
+                        <p>Collection of metamorphic rocks showing the effects of faulting.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/topographic-view.jpg" alt="Topographic view of the property">
+                    <div class="gallery-item-content">
+                        <h3>Topographic View</h3>
+                        <p>Aerial view showing the subtle ridge marking the fault trace.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⏰ Geological Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Precambrian (>540 million years ago)</h3>
+                        <p>Original metamorphic basement rocks formed through regional metamorphism.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Paleozoic Era (540-250 million years ago)</h3>
+                        <p>Sedimentary layers deposited over the metamorphic basement.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Appalachian Orogeny (~300 million years ago)</h3>
+                        <p>Major tectonic event created the thrust fault through intense compression.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Present Day</h3>
+                        <p>Erosion has exposed the fault zone, creating the current landscape.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Research & Documentation</h2>
+            <p>This geological investigation is part of an ongoing effort to document and understand the geological features of the Riner area. The thrust fault represents a significant geological feature that provides insights into the ancient tectonic history of the Appalachian Mountains.</p>
+            <p>Field work includes geological mapping, rock sampling, and structural analysis to better understand the fault's characteristics and its relationship to regional geology.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Riner Thrust Fault Exploration | Geological Investigation Project</p>
+            <p>Located in Riner, Virginia | Montgomery County</p>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([37.0, -80.5], 13);
+
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add fault line (approximate location)
+        var faultLine = L.polyline([
+            [37.02, -80.52],
+            [37.00, -80.50],
+            [36.98, -80.48]
+        ], {
+            color: '#e74c3c',
+            weight: 4,
+            opacity: 0.8,
+            dashArray: '10, 10'
+        }).addTo(map);
+
+        // Add property boundary (approximate)
+        var propertyBounds = L.rectangle([
+            [37.03, -80.54],
+            [36.97, -80.46]
+        ], {
+            color: '#3498db',
+            weight: 2,
+            opacity: 0.5,
+            fillOpacity: 0.1
+        }).addTo(map);
+
+        // Add markers for observation points
+        var observationPoints = [
+            {lat: 37.01, lng: -80.51, title: "Outcrop A - Main fault exposure"},
+            {lat: 37.00, lng: -80.50, title: "Outcrop B - Secondary deformation"},
+            {lat: 36.99, lng: -80.49, title: "Outcrop C - Weathered zone"}
+        ];
+
+        observationPoints.forEach(function(point) {
+            L.marker([point.lat, point.lng])
+                .addTo(map)
+                .bindPopup(point.title);
+        });
+
+        // Add legend
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function(map) {
+            var div = L.DomUtil.create('div', 'info legend');
+            div.style.backgroundColor = 'white';
+            div.style.padding = '10px';
+            div.style.borderRadius = '5px';
+            div.style.border = '2px solid #ccc';
+            
+            div.innerHTML = '<h4 style="margin: 0 0 10px 0;">Legend</h4>' +
+                           '<div><span style="color: #e74c3c;">━━━</span> Thrust Fault</div>' +
+                           '<div><span style="color: #3498db;">━━━</span> Property Boundary</div>' +
+                           '<div><span style="color: #27ae60;">●</span> Observation Points</div>';
+            
+            return div;
+        };
+        legend.addTo(map);
+    </script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Geological Map - Fries Thrust Fault</title>
+    
+    <!-- Custom Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: #0d0b08;
+            color: #f5f0e8;
+            line-height: 1.6;
+        }
+        
+        .map-header {
+            background: rgba(13, 11, 8, 0.92);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .map-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #f5f0e8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .map-subtitle {
+            font-family: 'Inconsolata', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #d4845a;
+            margin-bottom: 1rem;
+        }
+        
+        .offline-notice {
+            background: rgba(176, 92, 42, 0.2);
+            border: 1px solid #b05c2a;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 2rem;
+            text-align: center;
+            font-family: 'Inconsolata', monospace;
+            font-size: 0.8rem;
+        }
+        
+        .map-container {
+            position: relative;
+            height: 600px;
+            background: linear-gradient(135deg, #1a1510 0%, #2c241a 100%);
+            border: 2px solid #b05c2a;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 2rem;
+        }
+        
+        #geological-map {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px),
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px);
+        }
+        
+        .map-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(13, 11, 8, 0.9);
+            border: 1px solid #b05c2a;
+            border-radius: 8px;
+            padding: 1rem;
+            min-width: 200px;
+        }
+        
+        .control-title {
+            font-family: 'Inconsolata', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #d4845a;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #b05c2a;
+            padding-bottom: 0.5rem;
+        }
+        
+        .layer-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .layer-toggle:hover {
+            color: #d4845a;
+        }
+        
+        .layer-toggle input {
+            margin-right: 0.5rem;
+        }
+        
+        .layer-toggle label {
+            font-family: 'Source Serif 4', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(13, 11, 8, 0.9);
+            border: 1px solid #b05c2a;
+            border-radius: 8px;
+            padding: 1rem;
+            max-width: 400px;
+            z-index: 1000;
+            transform: translateY(150%);
+            transition: transform 0.3s ease;
+        }
+        
+        .info-panel.active {
+            transform: translateY(0);
+        }
+        
+        .info-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #f5f0e8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-description {
+            font-size: 0.9rem;
+            color: #c9b99a;
+            margin-bottom: 0.8rem;
+        }
+        
+        .info-details {
+            font-family: 'Inconsolata', monospace;
+            font-size: 0.7rem;
+            color: #8c7b6a;
+        }
+        
+        .close-info {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #b05c2a;
+            color: #f5f0e8;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(13, 11, 8, 0.9);
+            border: 1px solid #b05c2a;
+            border-radius: 8px;
+            padding: 1rem;
+            z-index: 1000;
+        }
+        
+        .legend-title {
+            font-family: 'Inconsolata', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #d4845a;
+            margin-bottom: 0.8rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            margin-right: 0.5rem;
+            border-radius: 2px;
+        }
+        
+        .coordinates {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(13, 11, 8, 0.9);
+            border: 1px solid #b05c2a;
+            border-radius: 8px;
+            padding: 0.8rem;
+            z-index: 1000;
+            font-family: 'Inconsolata', monospace;
+            font-size: 0.7rem;
+            color: #8c7b6a;
+        }
+        
+        .zoom-controls {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .zoom-btn {
+            background: rgba(13, 11, 8, 0.9);
+            border: 1px solid #b05c2a;
+            color: #f5f0e8;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .zoom-btn:hover {
+            background: #b05c2a;
+            transform: scale(1.05);
+        }
+        
+        .fault-line {
+            position: absolute;
+            background: #e74c3c;
+            height: 4px;
+            transform-origin: left center;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .fault-line:hover {
+            height: 6px;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+        
+        .property-boundary {
+            position: absolute;
+            border: 2px solid #3498db;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+        
+        .property-boundary:hover {
+            background: rgba(52, 152, 219, 0.2);
+            border-color: #5dade2;
+        }
+        
+        .outcrop-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #f39c12;
+            border: 3px solid #f5f0e8;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+            z-index: 200;
+        }
+        
+        .outcrop-marker:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.5);
+        }
+        
+        .scale-bar {
+            position: absolute;
+            bottom: 80px;
+            left: 20px;
+            background: rgba(13, 11, 8, 0.9);
+            border: 1px solid #b05c2a;
+            border-radius: 4px;
+            padding: 0.5rem;
+            z-index: 1000;
+            font-family: 'Inconsolata', monospace;
+            font-size: 0.7rem;
+            color: #8c7b6a;
+        }
+        
+        .scale-line {
+            width: 100px;
+            height: 2px;
+            background: #f5f0e8;
+            margin: 0.5rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .map-container {
+                height: 400px;
+                margin: 1rem;
+            }
+            
+            .map-controls {
+                top: 10px;
+                right: 10px;
+                min-width: 150px;
+                padding: 0.8rem;
+            }
+            
+            .info-panel {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+            
+            .legend {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="map-header">
+        <h1 class="map-title">Offline Geological Map</h1>
+        <p class="map-subtitle">Fries Thrust Fault • Riner, Virginia</p>
+    </header>
+
+    <div class="offline-notice">
+        <strong>📍 Offline Mode:</strong> This map works without internet connection using custom rendering.
+        <br>All geological features are fully interactive.
+    </div>
+
+    <div class="map-container">
+        <div id="geological-map">
+            <!-- Geological features will be rendered here -->
+        </div>
+        
+        <!-- Zoom Controls -->
+        <div class="zoom-controls">
+            <button class="zoom-btn" onclick="zoomIn()">+</button>
+            <button class="zoom-btn" onclick="zoomOut()">−</button>
+            <button class="zoom-btn" onclick="resetZoom()">⟲</button>
+        </div>
+        
+        <!-- Map Controls -->
+        <div class="map-controls">
+            <div class="control-title">Map Layers</div>
+            
+            <div class="layer-toggle">
+                <input type="checkbox" id="fault-layer" checked onchange="toggleLayer('fault')">
+                <label for="fault-layer">Thrust Fault</label>
+            </div>
+            
+            <div class="layer-toggle">
+                <input type="checkbox" id="property-layer" checked onchange="toggleLayer('property')">
+                <label for="property-layer">Property Boundary</label>
+            </div>
+            
+            <div class="layer-toggle">
+                <input type="checkbox" id="outcrops-layer" checked onchange="toggleLayer('outcrops')">
+                <label for="outcrops-layer">Rock Outcrops</label>
+            </div>
+            
+            <div class="layer-toggle">
+                <input type="checkbox" id="grid-layer" checked onchange="toggleLayer('grid')">
+                <label for="grid-layer">Coordinate Grid</label>
+            </div>
+        </div>
+        
+        <!-- Coordinates Display -->
+        <div class="coordinates">
+            <div>Lat: <span id="lat-display">37.01</span></div>
+            <div>Lng: <span id="lng-display">-80.51</span></div>
+            <div>Zoom: <span id="zoom-display">1.0</span>x</div>
+        </div>
+        
+        <!-- Scale Bar -->
+        <div class="scale-bar">
+            <div>Scale: <span id="scale-display">100m</span></div>
+            <div class="scale-line"></div>
+        </div>
+        
+        <!-- Information Panel -->
+        <div class="info-panel" id="info-panel">
+            <button class="close-info" onclick="closeInfoPanel()">×</button>
+            <div class="info-title" id="info-title">Select a feature</div>
+            <div class="info-description" id="info-description">Click on any map feature to see detailed geological information.</div>
+            <div class="info-details" id="info-details"></div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-title">Legend</div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background: #e74c3c;"></div>
+                <span>Thrust Fault</span>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background: #3498db;"></div>
+                <span>Property Boundary</span>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f39c12;"></div>
+                <span>Rock Outcrops</span>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background: #27ae60;"></div>
+                <span>Metamorphic Rock</span>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background: #9b59b6;"></div>
+                <span>Sedimentary Rock</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Offline map implementation
+        class OfflineMap {
+            constructor() {
+                this.container = document.getElementById('geological-map');
+                this.zoom = 1.0;
+                this.offsetX = 0;
+                this.offsetY = 0;
+                this.isDragging = false;
+                this.dragStartX = 0;
+                this.dragStartY = 0;
+                this.layers = {
+                    fault: true,
+                    property: true,
+                    outcrops: true,
+                    grid: true
+                };
+                
+                // Geological data (normalized coordinates 0-1)
+                this.geologicalData = {
+                    fault: [
+                        {x: 0.2, y: 0.3},
+                        {x: 0.35, y: 0.4},
+                        {x: 0.5, y: 0.5},
+                        {x: 0.65, y: 0.6},
+                        {x: 0.8, y: 0.7}
+                    ],
+                    property: {
+                        x: 0.15, y: 0.25,
+                        width: 0.7, height: 0.5
+                    },
+                    outcrops: [
+                        {
+                            x: 0.35, y: 0.4,
+                            name: "Outcrop A - Main Fault Exposure",
+                            description: "Primary exposure of the Fries Thrust Fault with clear foliation and S-C fabric indicating top-to-the-southeast movement.",
+                            rockType: "Gneiss",
+                            age: "1.1-1.3 billion years",
+                            observations: "Strong foliation, shear zones, mineral alignment"
+                        },
+                        {
+                            x: 0.5, y: 0.5,
+                            name: "Outcrop B - Secondary Deformation",
+                            description: "Secondary fault zone showing intense shearing and mylonitic texture development.",
+                            rockType: "Mylonite",
+                            age: "1.1-1.3 billion years",
+                            observations: "Fine-grained matrix, rotated porphyroclasts, dynamic recrystallization"
+                        },
+                        {
+                            x: 0.65, y: 0.6,
+                            name: "Outcrop C - Weathered Zone",
+                            description: "Weathered fault zone margin showing advanced chemical weathering and soil development.",
+                            rockType: "Weathered Gneiss",
+                            age: "1.1-1.3 billion years",
+                            observations: "Saprolite development, iron oxide staining, clay alteration"
+                        }
+                    ]
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.render();
+                this.updateCoordinates();
+            }
+            
+            setupEventListeners() {
+                // Mouse events
+                this.container.addEventListener('mousedown', (e) => this.startDrag(e));
+                this.container.addEventListener('mousemove', (e) => this.drag(e));
+                this.container.addEventListener('mouseup', () => this.endDrag());
+                this.container.addEventListener('mouseleave', () => this.endDrag());
+                
+                // Touch events
+                this.container.addEventListener('touchstart', (e) => this.startDrag(e.touches[0]));
+                this.container.addEventListener('touchmove', (e) => this.drag(e.touches[0]));
+                this.container.addEventListener('touchend', () => this.endDrag());
+                
+                // Wheel zoom
+                this.container.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                    this.setZoom(this.zoom * delta);
+                });
+            }
+            
+            startDrag(e) {
+                this.isDragging = true;
+                this.dragStartX = e.clientX - this.offsetX;
+                this.dragStartY = e.clientY - this.offsetY;
+                this.container.style.cursor = 'grabbing';
+            }
+            
+            drag(e) {
+                if (!this.isDragging) return;
+                
+                this.offsetX = e.clientX - this.dragStartX;
+                this.offsetY = e.clientY - this.dragStartY;
+                this.render();
+                this.updateCoordinates();
+            }
+            
+            endDrag() {
+                this.isDragging = false;
+                this.container.style.cursor = 'grab';
+            }
+            
+            setZoom(newZoom) {
+                this.zoom = Math.max(0.5, Math.min(3.0, newZoom));
+                this.render();
+                this.updateCoordinates();
+                this.updateScale();
+            }
+            
+            render() {
+                // Clear container
+                this.container.innerHTML = '';
+                
+                // Apply transform
+                this.container.style.transform = `translate(${this.offsetX}px, ${this.offsetY}px) scale(${this.zoom})`;
+                
+                // Render grid
+                if (this.layers.grid) {
+                    this.renderGrid();
+                }
+                
+                // Render property boundary
+                if (this.layers.property) {
+                    this.renderProperty();
+                }
+                
+                // Render fault line
+                if (this.layers.fault) {
+                    this.renderFault();
+                }
+                
+                // Render outcrops
+                if (this.layers.outcrops) {
+                    this.renderOutcrops();
+                }
+            }
+            
+            renderGrid() {
+                // Grid is already in CSS background
+                return;
+            }
+            
+            renderProperty() {
+                const prop = this.geologicalData.property;
+                const boundary = document.createElement('div');
+                boundary.className = 'property-boundary';
+                boundary.style.left = `${prop.x * 100}%`;
+                boundary.style.top = `${prop.y * 100}%`;
+                boundary.style.width = `${prop.width * 100}%`;
+                boundary.style.height = `${prop.height * 100}%`;
+                boundary.onclick = () => this.showPropertyInfo();
+                this.container.appendChild(boundary);
+            }
+            
+            renderFault() {
+                const points = this.geologicalData.fault;
+                
+                for (let i = 0; i < points.length - 1; i++) {
+                    const start = points[i];
+                    const end = points[i + 1];
+                    
+                    const line = document.createElement('div');
+                    line.className = 'fault-line';
+                    
+                    const dx = end.x - start.x;
+                    const dy = end.y - start.y;
+                    const length = Math.sqrt(dx * dx + dy * dy);
+                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                    
+                    line.style.left = `${start.x * 100}%`;
+                    line.style.top = `${start.y * 100}%`;
+                    line.style.width = `${length * 100}%`;
+                    line.style.transform = `rotate(${angle}deg)`;
+                    line.style.transformOrigin = '0 50%';
+                    
+                    line.onclick = () => this.showFaultInfo();
+                    this.container.appendChild(line);
+                }
+            }
+            
+            renderOutcrops() {
+                this.geologicalData.outcrops.forEach((outcrop, index) => {
+                    const marker = document.createElement('div');
+                    marker.className = 'outcrop-marker';
+                    marker.style.left = `${outcrop.x * 100}%`;
+                    marker.style.top = `${outcrop.y * 100}%`;
+                    marker.onclick = () => this.showOutcropInfo(outcrop);
+                    this.container.appendChild(marker);
+                });
+            }
+            
+            showFaultInfo() {
+                this.showInfoPanel({
+                    name: "Fries Thrust Fault",
+                    description: "The Fries Thrust Fault is part of the Hayesville-Fries-Rockfish Valley fault system, the structural spine of the entire Blue Ridge. This fault exposes rock 1.1 to 1.3 billion years old at river level.",
+                    rockType: "Thrust Fault",
+                    age: "Late Paleozoic (~300 million years ago)",
+                    observations: "Top-to-the-southeast movement, 30-degree dip angle, ductile-brittle transition zone"
+                });
+            }
+            
+            showPropertyInfo() {
+                this.showInfoPanel({
+                    name: "Property Boundary",
+                    description: "Property boundary showing the area of geological investigation surrounding the Fries Thrust Fault exposure.",
+                    rockType: "Property",
+                    age: "Current",
+                    observations: "Approximately 15 acres, contains multiple fault exposures and outcrops"
+                });
+            }
+            
+            showOutcropInfo(outcrop) {
+                this.showInfoPanel(outcrop);
+            }
+            
+            showInfoPanel(data) {
+                const panel = document.getElementById('info-panel');
+                document.getElementById('info-title').textContent = data.name;
+                document.getElementById('info-description').textContent = data.description;
+                document.getElementById('info-details').innerHTML = `
+                    <div><strong>Rock Type:</strong> ${data.rockType}</div>
+                    <div><strong>Age:</strong> ${data.age}</div>
+                    <div><strong>Observations:</strong> ${data.observations}</div>
+                `;
+                panel.classList.add('active');
+            }
+            
+            updateCoordinates() {
+                const centerX = this.container.offsetWidth / 2;
+                const centerY = this.container.offsetHeight / 2;
+                
+                // Convert screen coordinates to lat/lng (approximate)
+                const lat = 37.01 + (centerY - this.offsetY) / (1000 * this.zoom);
+                const lng = -80.51 + (centerX - this.offsetX) / (1000 * this.zoom);
+                
+                document.getElementById('lat-display').textContent = lat.toFixed(4);
+                document.getElementById('lng-display').textContent = lng.toFixed(4);
+                document.getElementById('zoom-display').textContent = this.zoom.toFixed(1);
+            }
+            
+            updateScale() {
+                const scale = Math.round(100 / this.zoom);
+                document.getElementById('scale-display').textContent = `${scale}m`;
+            }
+            
+            toggleLayer(layerName) {
+                this.layers[layerName] = !this.layers[layerName];
+                this.render();
+            }
+        }
+        
+        // Global functions
+        let map;
+        
+        function zoomIn() {
+            map.setZoom(map.zoom * 1.2);
+        }
+        
+        function zoomOut() {
+            map.setZoom(map.zoom * 0.8);
+        }
+        
+        function resetZoom() {
+            map.zoom = 1.0;
+            map.offsetX = 0;
+            map.offsetY = 0;
+            map.render();
+            map.updateCoordinates();
+            map.updateScale();
+        }
+        
+        function toggleLayer(layerName) {
+            map.toggleLayer(layerName);
+        }
+        
+        function closeInfoPanel() {
+            document.getElementById('info-panel').classList.remove('active');
+        }
+        
+        // Initialize map when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            map = new OfflineMap();
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case '+':
+                case '=':
+                    zoomIn();
+                    break;
+                case '-':
+                case '_':
+                    zoomOut();
+                    break;
+                case '0':
+                    resetZoom();
+                    break;
+                case 'Escape':
+                    closeInfoPanel();
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>

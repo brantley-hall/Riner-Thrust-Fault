@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local Preview - Riner Thrust Fault</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234169E1'><path d='M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z'/></svg>">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .preview-info { 
+            background: #f0f8ff; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            border: 2px solid #4169E1;
+        }
+        .iframe-container { 
+            width: 100%; 
+            height: 800px; 
+            border: 2px solid #ccc; 
+            border-radius: 8px; 
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            border-radius: 6px; 
+        }
+        .preview-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4169E1, #008b8b);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .preview-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(65, 105, 225, 0.4);
+        }
+        .preview-tooltip {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1001;
+            pointer-events: none;
+        }
+        .preview-button:hover + .preview-tooltip {
+            opacity: 1;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .status {
+            color: #27ae60;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-info">
+        <h2>🏔️ Local Preview - Riner Thrust Fault Exploration</h2>
+        <p><strong>Status:</strong> <span class="status">File loaded successfully ✅</span></p>
+        <p><strong>Source:</strong> Your copied index.html from Downloads folder</p>
+        <p><strong>Size:</strong> 15.8 MB (large file with extensive content)</p>
+        <p><strong>Note:</strong> This is a local preview of your geological exploration website.</p>
+    </div>
+    
+    <div class="iframe-container">
+        <iframe id="previewFrame" src="index.html" title="Riner Thrust Fault Preview"></iframe>
+    </div>
+    
+    <!-- Floating Preview Button -->
+    <button class="preview-button" onclick="refreshPreview()" title="Refresh Preview">
+        👁️
+    </button>
+    <div class="preview-tooltip">
+        Click to refresh preview
+    </div>
+    
+    <script>
+        function refreshPreview() {
+            const iframe = document.getElementById('previewFrame');
+            const currentSrc = iframe.src;
+            
+            // Clear the iframe
+            iframe.src = 'about:blank';
+            
+            // Brief delay then reload
+            setTimeout(() => {
+                iframe.src = currentSrc;
+            }, 100);
+            
+            // Visual feedback
+            const button = document.querySelector('.preview-button');
+            button.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 150);
+            }, 100);
+        }
+        
+        // Keyboard shortcut (Ctrl+R or F5)
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && e.key === 'r') || e.key === 'F5') {
+                e.preventDefault();
+                refreshPreview();
+            }
+        });
+        
+        // Auto-refresh every 30 seconds (optional)
+        setInterval(() => {
+            console.log('Auto-refreshing preview...');
+            refreshPreview();
+        }, 30000);
+    </script>
+</body>
+</html>
