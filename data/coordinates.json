@@ -1,0 +1,49 @@
+{
+  "fault": {
+    "name": "Riner Thrust Fault",
+    "type": "Thrust Fault",
+    "dip_angle": "30 degrees",
+    "trend": "Northeast-Southwest",
+    "age": "Late Paleozoic (~300 million years ago)",
+    "formation": "Appalachian orogeny"
+  },
+  "coordinates": {
+    "fault_trace": [
+      {"lat": 37.02, "lng": -80.52, "description": "Northern fault exposure"},
+      {"lat": 37.01, "lng": -80.51, "description": "Main fault outcrop"},
+      {"lat": 37.00, "lng": -80.50, "description": "Central observation point"},
+      {"lat": 36.99, "lng": -80.49, "description": "Southern exposure"},
+      {"lat": 36.98, "lng": -80.48, "description": "Fault terminus"}
+    ],
+    "property_boundary": {
+      "northwest": {"lat": 37.03, "lng": -80.54},
+      "southeast": {"lat": 36.97, "lng": -80.46}
+    }
+  },
+  "observation_points": [
+    {
+      "id": "outcrop_a",
+      "name": "Outcrop A - Main fault exposure",
+      "coordinates": {"lat": 37.01, "lng": -80.51},
+      "description": "Primary exposure showing clear fault plane",
+      "rock_type": "Metamorphic basement",
+      "observations": "Clear foliation, shear zones, mineral alignment"
+    },
+    {
+      "id": "outcrop_b", 
+      "name": "Outcrop B - Secondary deformation",
+      "coordinates": {"lat": 37.00, "lng": -80.50},
+      "description": "Secondary fault zone with brecciation",
+      "rock_type": "Fractured metamorphic",
+      "observations": "Intense fracturing, quartz veins, alteration"
+    },
+    {
+      "id": "outcrop_c",
+      "name": "Outcrop C - Weathered zone", 
+      "coordinates": {"lat": 36.99, "lng": -80.49},
+      "description": "Weathered fault zone with soil development",
+      "rock_type": "Weathered metamorphic",
+      "observations": "Advanced weathering, soil profile, iron staining"
+    }
+  ]
+}

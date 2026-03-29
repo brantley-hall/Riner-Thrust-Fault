@@ -1,0 +1,63 @@
+{
+  "rock_samples": [
+    {
+      "sample_id": "RS-001",
+      "location": "Outcrop A",
+      "coordinates": {"lat": 37.01, "lng": -80.51},
+      "rock_type": "Gneiss",
+      "collection_date": "2024-03-15",
+      "description": "Highly foliated metamorphic rock showing clear evidence of ductile deformation",
+      "minerals": ["Quartz", "Feldspar", "Mica", "Amphibole"],
+      "measurements": {
+        "foliation_angle": "25 degrees",
+        "grain_size": "Medium-coarse",
+        "hardness": "6-7 on Mohs scale"
+      },
+      "structural_features": ["Foliation", "S-C fabric", "Pressure solution", "Mineral lineation"]
+    },
+    {
+      "sample_id": "RS-002", 
+      "location": "Outcrop B",
+      "coordinates": {"lat": 37.00, "lng": -80.50},
+      "rock_type": "Mylonite",
+      "collection_date": "2024-03-16",
+      "description": "Fine-grained metamorphic rock formed in fault zone through intense shearing",
+      "minerals": ["Quartz", "Feldspar", "Mica", "Chlorite"],
+      "measurements": {
+        "grain_size": "Very fine",
+        "hardness": "5-6 on Mohs scale",
+        "deformation": "Intense"
+      },
+      "structural_features": ["Myrmekite", "Dynamic recrystallization", "S-C fabric", "Rotated porphyroclasts"]
+    },
+    {
+      "sample_id": "RS-003",
+      "location": "Outcrop C", 
+      "coordinates": {"lat": 36.99, "lng": -80.49},
+      "rock_type": "Weathered gneiss",
+      "collection_date": "2024-03-17",
+      "description": "Chemically weathered metamorphic rock from fault zone margin",
+      "minerals": ["Quartz", "Clay minerals", "Iron oxides", "Residual feldspar"],
+      "measurements": {
+        "weathering_grade": "III-IV",
+        "soil_development": "Moderate",
+        "iron_staining": "Present"
+      },
+      "structural_features": ["Saprolite development", "Iron oxide staining", "Clay alteration", "Residual structure"]
+    }
+  ],
+  "analysis_results": [
+    {
+      "sample_id": "RS-001",
+      "thin_section": "Shows strong foliation with S-C fabric, quartz shows undulose extinction",
+      "xrd": "Quartz 45%, Feldspar 35%, Mica 15%, Amphibole 5%",
+      "geochemistry": "SiO2: 72%, Al2O3: 14%, FeO: 4%, CaO: 2%, Na2O: 3%, K2O: 5%"
+    },
+    {
+      "sample_id": "RS-002",
+      "thin_section": "Fine-grained matrix with rotated porphyroclasts, dynamic recrystallization evident",
+      "xrd": "Quartz 50%, Feldspar 25%, Mica 20%, Chlorite 5%",
+      "geochemistry": "SiO2: 68%, Al2O3: 16%, FeO: 6%, CaO: 3%, Na2O: 2%, K2O: 5%"
+    }
+  ]
+}
