@@ -252,7 +252,7 @@ nav .nav-title{color:var(--sand);font-style:italic;font-family:'Playfair Display
 
 .absent-item--hero .absent-card-front {
   border-left-color: #ffd93d;
-  background: linear-gradient(135deg, #2d5a8e, #4a7db8, #6ba0e8);
+  background: linear-gradient(135deg, #1a4d2e, #2d7a4e, #4a9d5f);
 }
 
 .absent-item--hero .absent-card-front::before {
@@ -330,12 +330,14 @@ nav .nav-title{color:var(--sand);font-style:italic;font-family:'Playfair Display
 
 .absent-number {
   font-family: 'Inconsolata', monospace;
-  font-size: 0.75rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #ffffff;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   opacity: 1;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 10;
 }
 
 .absent-item--hero .absent-number {
@@ -343,22 +345,24 @@ nav .nav-title{color:var(--sand);font-style:italic;font-family:'Playfair Display
 }
 
 .absent-content {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 10;
 }
 
 .absent-title {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.575rem;
   color: #ffffff;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.45rem;
   line-height: 1.3;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .absent-time {
   font-family: 'Inconsolata', monospace;
-  font-size: 0.65rem;
+  font-size: 0.975rem;
   color: #e8f5e8;
   opacity: 1;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
@@ -366,7 +370,7 @@ nav .nav-title{color:var(--sand);font-style:italic;font-family:'Playfair Display
 
 .absent-detail {
   font-family: 'Source Serif 4', serif;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   color: #e8f5e8;
   line-height: 1.5;
   opacity: 0;
@@ -400,7 +404,7 @@ nav .nav-title{color:var(--sand);font-style:italic;font-family:'Playfair Display
 
 .absent-back-number {
   font-family: 'Playfair Display', serif;
-  font-size: 5rem;
+  font-size: 7.5rem;
   font-weight: 900;
   color: rgba(255, 255, 255, 0.95);
   text-align: center;
@@ -412,11 +416,11 @@ nav .nav-title{color:var(--sand);font-style:italic;font-family:'Playfair Display
 
 .absent-back-label {
   font-family: 'Inconsolata', monospace;
-  font-size: 0.75rem;
+  font-size: 1.125rem;
   color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 2;
