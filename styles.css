@@ -255,13 +255,35 @@ nav .nav-title{color:var(--sand);font-style:italic;font-family:'Playfair Display
   background: linear-gradient(135deg, #2d5a8e, #4a7db8, #6ba0e8);
 }
 
+.absent-item--hero .absent-card-front::before {
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.05) 10px,
+      rgba(255, 255, 255, 0.05) 20px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 15px,
+      rgba(255, 255, 255, 0.03) 15px,
+      rgba(255, 255, 255, 0.03) 30px
+    );
+}
+
+.absent-item--hero .absent-card-front::after {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+}
+
 .absent-card-back {
-  background: #ff6b6b;
-  border: 3px solid #ff6b6b;
+  background: linear-gradient(135deg, #1a4d2e, #2d7a4e, #4a9d5f);
+  border: 3px solid #6fbf7f;
   transform: rotateY(180deg);
-  justify-content: center;
-  align-items: center;
   color: white;
+  position: relative;
+  overflow: hidden;
 }
 
 .absent-card-back::before {
@@ -271,15 +293,34 @@ nav .nav-title{color:var(--sand);font-style:italic;font-family:'Playfair Display
   left: 0;
   right: 0;
   bottom: 0;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 20px,
-    rgba(255, 255, 255, 0.2) 20px,
-    rgba(255, 255, 255, 0.2) 40px
-  );
-  animation: cardBackPattern 10s linear infinite;
-  border-radius: 12px;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.05) 10px,
+      rgba(255, 255, 255, 0.05) 20px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 15px,
+      rgba(255, 255, 255, 0.03) 15px,
+      rgba(255, 255, 255, 0.03) 30px
+    );
+  pointer-events: none;
+}
+
+.absent-card-back::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 @keyframes cardBackPattern {
