@@ -418,7 +418,7 @@
       font-variant-numeric: tabular-nums;
     }
     /* Push page content up so player doesn't overlap footer */
-    body { padding-bottom: 130px !important; }
+    body { padding-bottom: 60px; }
   `;
   document.head.appendChild(style);
 
@@ -543,7 +543,8 @@
       'Pangaea': 'Pan-gee-ah',
       'craton': 'cray-tahn',
       'Iapetus': 'Eye-ap-it-us',
-      'Orogeny': 'Ore-ig-any'
+      'Orogeny': 'Ore-ig-any',
+      'Saprolite': 'Sap-ruh-lahyt'
     };
 
     // Create phonetic version for speech synthesis
@@ -680,7 +681,7 @@
       collapsed = !collapsed;
       player.classList.toggle('collapsed', collapsed);
       collapseToggle.textContent = collapsed ? 'Show ▲' : 'Hide ▼';
-      document.body.style.paddingBottom = collapsed ? '42px' : '130px';
+      document.body.style.paddingBottom = collapsed ? '42px' : '60px';
     }
   });
 
