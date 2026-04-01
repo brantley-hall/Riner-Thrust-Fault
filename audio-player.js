@@ -13,6 +13,25 @@
 
   const SECTIONS = [
     {
+      id: 'opening',
+      label: 'The Rarest Thing Underfoot',
+      anchor: '#opening',
+      segs: [
+        {
+          title: 'Rocks Older Than Dinosaurs',
+          text: 'In the contiguous United States, you can count on two hands the places where you can find rocks older than dinosaurs. This is one of them. There is a place in the American West where, if you descend a mile into the earth — past limestone laid down by shallow Cambrian seas, past sandstone from ancient desert dunes, past layer after layer of sedimentary rock recording 500 million years of history — you finally reach the bottom. The walls close in. The river runs dark and fast. And the rock changes.'
+        },
+        {
+          title: 'The Grand Canyon Connection',
+          text: 'At the bottom of the Grand Canyon, where the Colorado River has spent six million years cutting through northern Arizona, the sedimentary layers end and something older begins. The rock turns dark — nearly black in shadow, streaked with veins of pink granite. It is no longer layered. It is folded, banded, crystalline. Geologists call it the Vishnu Basement Rocks. It is 1.7 to 1.84 billion years old — rock that predates the dinosaurs by over a billion years. The canyon did not create that rock. It only revealed it.'
+        },
+        {
+          title: 'A Hidden Treasure in Virginia',
+          text: 'The Grand Canyon is one of a small number of places in the contiguous United States where Precambrian basement rock reaches the surface. The others are scattered, isolated, and almost all of them required something dramatic to expose them — a mile of canyon cutting, a glacially scoured uplift, a dome pushed skyward by deep crustal forces. But in the lower 48 states, the basement is almost universally buried beneath younger rock. Finding it at the surface is the exception, not the rule. The full list of places where it can be touched is short: the Grand Canyon inner gorge. The Adirondacks. The Minnesota River Valley. The Black Hills. The Front Range of Colorado. The Llano Uplift of Texas. The Blue Ridge of Virginia. And that last entry — the Blue Ridge of Virginia — is a hidden treasure that can be accessed from country roads in Montgomery County.'
+        }
+      ]
+    },
+    {
       id: 'intro',
       label: 'Introduction',
       anchor: '#intro',
