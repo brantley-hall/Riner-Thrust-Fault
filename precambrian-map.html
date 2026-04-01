@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hayesville–Fries–Rockfish Valley Fault System</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inconsolata:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a1208;
+    --stone: #9e8b76;
+    --sand: #d4bc98;
+    --cream: #f7f2e8;
+    --parchment: #efe7d5;
+    --deep: #2c1f0f;
+    --accent: #b85e28;
+    --accent-lt: #d9895a;
+    --blue-dark: #1a3a5c;
+    --blue-mid: #3B6E9E;
+    --seg-rockfish: #5B8DB8;
+    --seg-fries: #B85E28;
+    --seg-hayesville: #7B6B4A;
+  }
+  html, body { height: 100%; font-family: 'Inconsolata', monospace; }
+  #map { width: 100%; height: 100vh; }
+
+  .map-header {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(44,31,15,0.94); backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(212,188,152,0.18);
+    padding: 10px 20px; display: flex; align-items: baseline; gap: 14px;
+  }
+  .map-header h1 {
+    font-family: 'Playfair Display', serif; font-size: 0.95rem;
+    font-weight: 700; color: var(--cream); letter-spacing: 0.02em;
+  }
+  .map-header span { font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone); }
+
+  .legend {
+    position: absolute; bottom: 28px; left: 16px; z-index: 1000;
+    background: rgba(44,31,15,0.94); backdrop-filter: blur(8px);
+    border: 1px solid rgba(212,188,152,0.15); border-radius: 4px;
+    padding: 14px 16px; min-width: 230px;
+  }
+  .legend-title {
+    font-family: 'Playfair Display', serif; font-size: 0.78rem;
+    font-weight: 700; color: var(--sand); margin-bottom: 11px; letter-spacing: 0.03em;
+  }
+  .legend-section { margin-bottom: 10px; }
+  .legend-section-label {
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone); margin-bottom: 5px; display: block;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 9px; margin-bottom: 5px;
+    font-size: 0.68rem; letter-spacing: 0.03em; color: var(--parchment);
+  }
+  .legend-dot { width: 11px; height: 11px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.45); flex-shrink: 0; }
+  .legend-dot.hero { width: 14px; height: 14px; background: var(--accent); }
+  .legend-dot.hfrv-named { background: #8B6914; }
+  .legend-dot.hfrv-town { background: #6B4F1A; }
+  .legend-dot.peer { background: var(--blue-mid); }
+  .legend-line { width: 26px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+  .legend-line.rockfish { background: var(--seg-rockfish); }
+  .legend-line.fries { background: var(--seg-fries); }
+  .legend-line.hayesville { background: var(--seg-hayesville); }
+
+  /* Popups */
+  .leaflet-popup-content-wrapper {
+    background: rgba(44,31,15,0.97) !important; border: 1px solid rgba(212,188,152,0.22) !important;
+    border-radius: 4px !important; box-shadow: 0 4px 24px rgba(0,0,0,0.45) !important; color: var(--cream) !important;
+  }
+  .leaflet-popup-tip { background: rgba(44,31,15,0.97) !important; }
+  .leaflet-popup-content { margin: 14px 16px !important; min-width: 200px; }
+  .leaflet-popup-close-button { color: var(--stone) !important; top: 8px !important; right: 10px !important; }
+
+  .popup-segment { font-family: 'Inconsolata',monospace; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-lt); margin-bottom: 4px; }
+  .popup-title { font-family: 'Playfair Display',serif; font-size: 1.05rem; font-weight: 700; color: var(--cream); margin-bottom: 5px; line-height: 1.2; }
+  .popup-age { font-family: 'Inconsolata',monospace; font-size: 0.74rem; color: #FF5F3E; margin-bottom: 8px; letter-spacing: 0.07em; font-weight: 500; text-transform: uppercase; }
+  .popup-body { font-family: 'Playfair Display',serif; font-style: italic; font-size: 0.82rem; line-height: 1.62; color: #c8b898; max-width: 240px; }
+  .popup-fact { font-family: 'Inconsolata',monospace; font-size: 0.66rem; color: var(--stone); margin-top: 8px; line-height: 1.5; border-top: 1px solid rgba(212,188,152,0.12); padding-top: 7px; }
+</style>
+</head>
+<body>
+
+<div class="map-header">
+  <h1>The Hayesville–Fries–Rockfish Valley Fault System</h1>
+  <span>300-mile structural spine of the Blue Ridge &nbsp;·&nbsp; Virginia & North Carolina</span>
+</div>
+
+<div id="map"></div>
+
+<div class="legend">
+  <div class="legend-title">HFRV Fault System &amp; Comparisons</div>
+
+  <div class="legend-section">
+    <span class="legend-section-label">Fault segments</span>
+    <div class="legend-item"><div class="legend-line rockfish"></div>Rockfish Valley fault zone (VA)</div>
+    <div class="legend-item"><div class="legend-line fries"></div>Fries fault (VA)</div>
+    <div class="legend-item">
+      <div style="width:26px;height:10px;background:rgba(217,137,90,0.12);border:1px dashed rgba(184,94,40,0.4);flex-shrink:0;border-radius:2px;"></div>
+      Protomylonite zone (~1.2 km)
+    </div>
+    <div class="legend-item">
+      <div style="width:26px;height:10px;background:rgba(184,94,40,0.18);border:1px solid rgba(139,58,16,0.45);flex-shrink:0;border-radius:2px;"></div>
+      Mylonite core (~0.5 km)
+    </div>
+    <div class="legend-item"><div class="legend-line hayesville"></div>Hayesville fault (NC)</div>
+  </div>
+
+  <div class="legend-section">
+    <span class="legend-section-label">Exposure sites</span>
+    <div class="legend-item"><div class="legend-dot hero"></div>Quartz River — Hall Land</div>
+    <div class="legend-item"><div class="legend-dot hfrv-named" style="background:#8B4513"></div>HFRV named exposures</div>
+    <div class="legend-item"><div class="legend-dot" style="width:9px;height:9px;background:#8B4513;border:2px solid rgba(255,255,255,0.4)"></div>Fault bridge crossings (Whitmarsh)</div>
+    <div class="legend-item"><div class="legend-dot hfrv-town" style="background:#6B5A3A"></div>Towns on the fault</div>
+  </div>
+
+  <div class="legend-section">
+    <span class="legend-section-label">National comparisons</span>
+    <div class="legend-item"><div class="legend-dot peer"></div>Peer Precambrian sites</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+
+const map = L.map('map', { center: [37.5, -80.8], zoom: 7, zoomControl: true });
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  maxZoom: 16
+}).addTo(map);
+
+map.zoomControl.setPosition('bottomright');
+
+// ── FAULT TRACES ─────────────────────────────────────────────
+// Three distinct named segments following the actual NE-SW Blue Ridge corridor
+
+// SEGMENT 1: Rockfish Valley fault zone
+// Charlottesville/Rockfish Gap → Nellysford → Lovingston → Lynchburg area
+const rockfishTrace = [
+  [38.032, -78.858], // Rockfish Gap (I-64, northern terminus)
+  [37.990, -78.880], // Afton Mountain area
+  [37.940, -78.900], // Nellysford
+  [37.879, -78.893], // Rockfish River gneiss outcrop (W&M field site)
+  [37.820, -78.920], // Lovingston area
+  [37.750, -78.960], // Nelson/Amherst county line area
+  [37.680, -79.010], // Amherst area
+  [37.600, -79.080], // Lynchburg area — southern end of Rockfish Valley segment
+];
+
+L.polyline(rockfishTrace, {
+  color: '#5B8DB8', weight: 4, opacity: 0.9,
+  lineJoin: 'round', lineCap: 'round'
+}).addTo(map).bindTooltip('Rockfish Valley fault zone', { sticky: true, className: 'fault-tip' });
+
+// SEGMENT 2: Fries fault
+// Bedford/Franklin County → Floyd → through study area (Whitmarsh corridor) → Carroll/Grayson → VA/NC border
+const friesTrace = [
+  [37.600, -79.080], // connects from Rockfish Valley segment
+  [37.520, -79.200], // Bedford County area
+  [37.420, -79.380], // Franklin County area
+  [37.320, -79.560], // Franklin/Floyd county line
+  [37.210, -79.750], // Floyd County — northern Floyd
+  [37.100, -79.920], // Floyd County — central
+  [37.060, -80.150], // approaching study area from NE
+  [37.052, -80.362], // Study Point F — Pilot Gneiss (Kaygi)
+  [37.042, -80.369], // Study Point E — Little River Gneiss (Kaygi)
+  [37.032, -80.401], // Study Point K
+  [37.021, -80.409], // Study Point I
+  [37.018, -80.407], // Hall Land / McManus Shoals
+  [37.015, -80.425], // Route 8 bridge
+  [37.011, -80.441], // Study Point D
+  [37.011, -80.453], // Study Point C
+  [37.011, -80.461], // Study Point B
+  [37.004, -80.474], // Study Point A
+  [36.940, -80.530], // continuing SW along fault strike
+  [36.870, -80.600], // Carroll County
+  [36.800, -80.720], // Carroll County — Hillsville area
+  [36.716, -80.972], // FRIES, VA — town the fault is named for
+  [36.650, -81.100], // Grayson County
+  [36.580, -81.200], // VA/NC border area
+];
+
+L.polyline(friesTrace, {
+  color: '#B85E28', weight: 4.5, opacity: 0.9,
+  lineJoin: 'round', lineCap: 'round'
+}).addTo(map).bindTooltip('Fries fault', { sticky: true });
+
+// Secondary dashed highlight on Fries segment
+L.polyline(friesTrace, {
+  color: '#d9895a', weight: 1.5, opacity: 0.45, dashArray: '5 4'
+}).addTo(map);
+
+// ── DUCTILE DEFORMATION ZONE (DDZ) ─────────────────────────────────────────
+// Buffer derived from trace nodes through the Whitmarsh study corridor
+// Fault strike ~NE-SW 45°; perpendicular offset applied to each side
+// Outer = protomylonite zone ~1.2 km each side (±0.011° lat, ±0.009° lon)
+// Inner = mylonite core ~0.5 km each side (±0.005° lat, ±0.004° lon)
+//
+// Trace nodes used (E→W):
+// F: 37.0522,-80.3619  E: 37.0420,-80.3686  K: 37.0320,-80.4010
+// I: 37.0210,-80.4092  Hall: 37.0182,-80.4056  Rt8: 37.0147,-80.4263
+// D: 37.0107,-80.4410  C: 37.0114,-80.4528  B: 37.0107,-80.4613  A: 37.0040,-80.4736
+
+const OFF_O = { lat: 0.011, lon: 0.009 }; // outer offset
+const OFF_I = { lat: 0.005, lon: 0.004 }; // inner offset
+
+const traceNodes = [
+  [37.0522, -80.3619], [37.0420, -80.3686], [37.0320, -80.4010],
+  [37.0210, -80.4092], [37.0182, -80.4056], [37.0147, -80.4263],
+  [37.0107, -80.4410], [37.0114, -80.4528], [37.0107, -80.4613],
+  [37.0040, -80.4736]
+];
+
+function makeBuffer(nodes, off) {
+  const nw = nodes.map(p => [p[0] + off.lat, p[1] - off.lon]);
+  const se = nodes.map(p => [p[0] - off.lat, p[1] + off.lon]).reverse();
+  return nw.concat(se);
+}
+
+// Outer DDZ — protomylonite zone
+L.polygon(makeBuffer(traceNodes, OFF_O), {
+  color: '#B85E28', weight: 0.8, opacity: 0.3,
+  fillColor: '#d9895a', fillOpacity: 0.08, dashArray: '5 4'
+}).addTo(map).bindTooltip('Protomylonite zone — outer DDZ (~1.2 km each side)', { sticky: true });
+
+// Inner DDZ — mylonite core
+L.polygon(makeBuffer(traceNodes, OFF_I), {
+  color: '#8B3A10', weight: 0.8, opacity: 0.35,
+  fillColor: '#B85E28', fillOpacity: 0.15
+}).addTo(map).bindTooltip('Mylonite core (~0.5 km each side)', { sticky: true });
+
+// SEGMENT 3: Hayesville fault
+// VA/NC border → Ashe County NC → Avery → Mitchell → Madison → Yancey → Cherokee → Clay
+const hayesvilleTrace = [
+  [36.580, -81.200], // VA/NC border
+  [36.450, -81.380], // Ashe County, NC
+  [36.300, -81.580], // Watauga/Avery area
+  [36.150, -81.850], // Avery/Mitchell area
+  [35.980, -82.080], // Mitchell/Yancey area
+  [35.850, -82.300], // Yancey County
+  [35.720, -82.520], // Madison County
+  [35.560, -82.740], // Buncombe/Haywood area
+  [35.430, -82.980], // Haywood County — Clyde area (Burnsville fault intersection)
+  [35.300, -83.200], // Swain/Jackson area
+  [35.150, -83.450], // Cherokee/Clay county line
+  [35.046, -83.818], // HAYESVILLE, NC — southwestern terminus
+];
+
+L.polyline(hayesvilleTrace, {
+  color: '#7B6B4A', weight: 3.5, opacity: 0.85,
+  lineJoin: 'round', lineCap: 'round'
+}).addTo(map).bindTooltip('Hayesville fault', { sticky: true });
+
+// ── ICON FACTORIES ─────────────────────────────────────────────
+function makeDot(color, size, label, sublabel, side) {
+  side = side || 'right';
+  const offset = size + 8;
+  const labelBlock = `
+    <div style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:500;
+      color:#2c1f0f;letter-spacing:0.04em;line-height:1.3;
+      text-shadow:0 1px 3px rgba(255,255,255,0.92),0 -1px 3px rgba(255,255,255,0.92),
+        1px 0 3px rgba(255,255,255,0.92),-1px 0 3px rgba(255,255,255,0.92);">${label}</div>
+    ${sublabel ? `<div style="font-family:'Inconsolata',monospace;font-size:10px;color:#6b4020;
+      letter-spacing:0.03em;
+      text-shadow:0 1px 3px rgba(255,255,255,0.9),0 -1px 3px rgba(255,255,255,0.9),
+        1px 0 3px rgba(255,255,255,0.9),-1px 0 3px rgba(255,255,255,0.9);">${sublabel}</div>` : ''}
+  `;
+  const labelDiv = side === 'right'
+    ? `<div style="position:absolute;left:${offset}px;top:50%;transform:translateY(-50%);white-space:nowrap;">${labelBlock}</div>`
+    : `<div style="position:absolute;right:${offset}px;top:50%;transform:translateY(-50%);white-space:nowrap;text-align:right;">${labelBlock}</div>`;
+
+  return L.divIcon({
+    className: '',
+    html: `<div style="position:relative;width:${size}px;height:${size}px;">
+      <div style="width:${size}px;height:${size}px;background:${color};border-radius:50%;
+        border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.38);"></div>
+      ${labelDiv}
+    </div>`,
+    iconSize: [size, size], iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -size/2 - 4]
+  });
+}
+
+// ── HFRV EXPOSURE & LANDMARK MARKERS ───────────────────────────
+
+// OUR LAND — precise coordinates provided — replaces Riner approximation
+L.marker([37.0182, -80.4056], { icon: makeDot('#B85E28', 18, 'Quartz River - Hall Land', '1.1–1.3 Ga · your land') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Montgomery &amp; Floyd Counties, VA</div>
+    <div class="popup-title">Quartz River — Hall Land</div>
+    <div class="popup-age">1.1 – 1.3 BILLION YEARS OLD &nbsp;·&nbsp; LITTLE RIVER GNEISS</div>
+    <div class="popup-body">The Little River crosses the Fries Thrust Fault twice through two meander loops on Laurel Ridge Mill Road (Route 602), between the Route 8 bridge to the northeast and the Brush Creek bridge (Route 787) to the southwest. The fault runs through the property. The Little River Gneiss exposed here is a mylonitic gneiss — caught in the fault's shear zone, ground and streaked into thin fissile plates while still hot and deep in the crust. No canyon, no expedition. The rock is at the surface, in the river, on the bank.</div>
+    <div class="popup-fact">Whitmarsh (1994) mapped this fault zone along a 10 km corridor between Route 8 and Route 787. The Little River Gneiss age: 1,128 ± 25 Ma (U-Pb zircon, Truman 1976). The mylonitic character of the Little River Gneiss is one of two headline findings of the Whitmarsh thesis — the defining academic study of this fault zone.</div>
+  `);
+
+// STUDY POINT L — precise coordinates provided
+L.marker([37.0170, -80.4066], { icon: makeDot('#D4A800', 11, 'Study Point L', 'Little River Shoals - McManus Land', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point L — Little River Shoals</div>
+    <div class="popup-age">37°1'1.15"N &nbsp;·&nbsp; 80°24'23.89"W</div>
+    <div class="popup-body">The Little River Shoals — a surface exposure along the Little River where the river runs over and through the fault zone rock. Shoals form where resistant rock crosses the stream channel; here that resistant material is the ancient Grenville-age gneiss brought to the surface by the Fries Thrust Fault. The shoals are a direct physical expression of the fault at the surface.</div>
+    <div class="popup-fact">River shoals over ancient basement rock are one of the clearest field indicators of a fault exposure zone — the same process that keeps the outcrop at Riner clean and legible year after year.</div>
+  `);
+
+// STUDY POINT K — precise coordinates provided
+L.marker([37.0320, -80.4010], { icon: makeDot('#D4A800', 11, 'Study Point K', '', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point K</div>
+    <div class="popup-age">37°1'55.05"N &nbsp;·&nbsp; 80°24'3.67"W</div>
+    <div class="popup-body">Precise field coordinate along the Fries Thrust Fault zone south of Riner, Virginia.</div>
+  `);
+
+// STUDY POINT J — precise coordinates provided
+L.marker([37.0136, -80.4249], { icon: makeDot('#D4A800', 11, 'Study Point J', 'Old Quarry', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point J — Old Quarry</div>
+    <div class="popup-age">37°0'48.90"N &nbsp;·&nbsp; 80°25'29.76"W</div>
+    <div class="popup-body">Old quarry site along the Fries Thrust Fault zone south of Riner, Virginia. Quarry operations in this area would have exposed fresh faces of the fault zone rock — either Little River Gneiss, Pilot Gneiss, or Chilhowee Group metasediments depending on location relative to the fault trace.</div>
+  `);
+
+// STUDY POINT I — precise coordinates provided
+L.marker([37.0210, -80.4092], { icon: makeDot('#D4A800', 11, 'Study Point I', '', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point I</div>
+    <div class="popup-age">37°1'15.51"N &nbsp;·&nbsp; 80°24'33.21"W</div>
+    <div class="popup-body">Precise field coordinate along the Fries Thrust Fault zone south of Riner, Virginia.</div>
+  `);
+
+// STUDY POINT H — precise coordinates provided
+L.marker([36.9783, -80.4016], { icon: makeDot('#D4A800', 11, 'Study Point H', 'Little River Gneiss - Kaygi', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point H — Little River Gneiss</div>
+    <div class="popup-age">36°58'41.94"N &nbsp;·&nbsp; 80°24'5.64"W</div>
+    <div class="popup-body">Little River Gneiss outcrop documented by Kaygi. The 1.128 billion year old mylonitic Grenville-age basement rock exposed at the surface along the Fries Thrust Fault zone south of Riner.</div>
+    <div class="popup-fact">Kaygi (1979) conducted detailed structural field mapping of this fault zone, identifying four phases of Paleozoic deformation. Her sample locations form the foundation of the spatial record of the fault zone through this corridor.</div>
+  `);
+
+// STUDY POINT G — precise coordinates provided
+L.marker([37.0183, -80.4085], { icon: makeDot('#D4A800', 11, 'Study Point G', 'Little River Gneiss - Kaygi', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point G — Little River Gneiss</div>
+    <div class="popup-age">37°1'5.91"N &nbsp;·&nbsp; 80°24'30.62"W</div>
+    <div class="popup-body">Little River Gneiss outcrop documented by Kaygi. The 1.128 billion year old mylonitic Grenville-age basement rock exposed at the surface along the Fries Thrust Fault zone south of Riner.</div>
+    <div class="popup-fact">Kaygi (1979) conducted detailed structural field mapping of this fault zone, identifying four phases of Paleozoic deformation. Her sample locations form the foundation of the spatial record of the fault zone through this corridor.</div>
+  `);
+
+// STUDY POINT F — precise coordinates provided
+L.marker([37.0522, -80.3619], { icon: makeDot('#D4A800', 11, 'Study Point F', 'Pilot Gneiss · Kaygi', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point F — Pilot Gneiss without Foliation</div>
+    <div class="popup-age">37°3'8.08"N &nbsp;·&nbsp; 80°21'42.73"W</div>
+    <div class="popup-body">Pilot Gneiss outcrop documented by Kaygi — specifically the unfoliated phase. The Pilot Gneiss is the standard basement gneiss north of the fault trace, outside the shear zone. Where it lacks foliation it preserves its original coarse, blocky Grenville-age texture — the contrast with the intensely foliated, streaky Little River Gneiss to the south makes the fault boundary physically legible in the rock.</div>
+    <div class="popup-fact">Whitmarsh (1994) describes the Pilot Gneiss as comprising a wide variety of units including amphibolitic layered gneiss, felsic gneiss, chloritic and graphitic schists, and mafic dikes. The unfoliated phase here represents rock that escaped the intense ductile shearing that transformed the Little River Gneiss into mylonite.</div>
+  `);
+
+// STUDY POINT E — precise coordinates provided
+L.marker([37.0420, -80.3686], { icon: makeDot('#D4A800', 11, 'Study Point E', 'Little River Gneiss - Kaygi', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point E — Little River Gneiss Outcrop</div>
+    <div class="popup-age">37°2'31.10"N &nbsp;·&nbsp; 80°22'6.83"W</div>
+    <div class="popup-body">Little River Gneiss outcrop documented by Patti Boyd Kaygi in her structural field mapping of the Riner area. This is a primary surface exposure of the mylonitic Little River Gneiss — the 1.128 billion year old Grenville-age basement rock thrust over younger Blue Ridge rocks along the Fries fault.</div>
+    <div class="popup-fact">Kaygi (1979) conducted detailed structural field mapping of this fault zone, identifying four phases of Paleozoic deformation and the Pilot Gneiss mega-nappe. Her work is a foundational reference cited throughout Whitmarsh (1994).</div>
+  `);
+
+// STUDY POINT D — precise coordinates provided
+L.marker([37.0107, -80.4410], { icon: makeDot('#D4A800', 11, 'Study Point D', '', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point D</div>
+    <div class="popup-age">37°0'38.48"N &nbsp;·&nbsp; 80°26'27.69"W</div>
+    <div class="popup-body">Precise field coordinate along the Fries Thrust Fault zone south of Riner, Virginia.</div>
+  `);
+
+// STUDY POINT C — precise coordinates provided
+L.marker([37.0114, -80.4528], { icon: makeDot('#D4A800', 11, 'Study Point C', '', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point C</div>
+    <div class="popup-age">37°0'41.24"N &nbsp;·&nbsp; 80°27'10.14"W</div>
+    <div class="popup-body">Precise field coordinate along the Fries Thrust Fault zone south of Riner, Virginia.</div>
+  `);
+
+// STUDY POINT B — precise coordinates provided
+L.marker([37.0107, -80.4613], { icon: makeDot('#D4A800', 11, 'Study Point B', '', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point B</div>
+    <div class="popup-age">37°0'38.58"N &nbsp;·&nbsp; 80°27'40.70"W</div>
+    <div class="popup-body">Precise field coordinate along the Fries Thrust Fault zone south of Riner, Virginia.</div>
+  `);
+
+// STUDY POINT A — precise coordinates provided
+L.marker([37.0040, -80.4736], { icon: makeDot('#D4A800', 11, 'Study Point A', '', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Precise field location</div>
+    <div class="popup-title">Study Point A</div>
+    <div class="popup-age">37°0'14.38"N &nbsp;·&nbsp; 80°28'25.17"W</div>
+    <div class="popup-body">Precise field coordinate along the Fries Thrust Fault zone south of Riner, Virginia.</div>
+  `);
+
+// ROUTE 8 BRIDGE — precise coordinates provided
+L.marker([37.0147, -80.4263], { icon: makeDot('#8B4513', 9, 'Rt. 8 bridge', 'NE fault crossing', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Montgomery/Floyd county line</div>
+    <div class="popup-title">Route 8 Bridge — Little River</div>
+    <div class="popup-age">37°0'52.93"N &nbsp;·&nbsp; 80°25'34.80"W</div>
+    <div class="popup-body">The northeastern boundary of the Whitmarsh (1994) study area. Route 8 crosses the Little River here — the northeastern extent of the mapped fault zone. The fault trace crosses beneath the river at this point. From here the Little River runs southwest through the meander loops on Laurel Ridge Mill Road before reaching the Brush Creek bridge.</div>
+    <div class="popup-fact">SR 8 crosses the main stem of the Little River at the Montgomery/Floyd county line and continues northeast as Riner Road through the village of Riner.</div>
+  `);
+
+// BRUSH CREEK BRIDGE — precise coordinates provided
+L.marker([37.0146, -80.4046], { icon: makeDot('#8B4513', 9, 'Brush Creek bridge', 'SW fault crossing', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Floyd County, VA</div>
+    <div class="popup-title">Brush Creek (Outlet) Bridge — Route 787</div>
+    <div class="popup-age">37°0'52.52"N &nbsp;·&nbsp; 80°24'16.52"W</div>
+    <div class="popup-body">The southwestern boundary of the Whitmarsh (1994) study area. Route 787 crosses the Little River near the Brush Creek outlet here — the southwestern extent of the mapped fault zone south of Riner. The Brush Creek anticlinorium, a doubly-plunging antiform of Pilot Gneiss and Chilhowee Group, has its nose located near this crossing.</div>
+    <div class="popup-fact">Whitmarsh found that structural interrelationships between the fault zone units are best observed in the southwestern portion of the mapped area — near Copper Valley, along the Indian Creek drainage, close to this bridge.</div>
+  `);
+
+
+// FRIES, VA — the town the fault is named for
+L.marker([36.716, -80.972], { icon: makeDot('#8B4513', 13, 'Fries, VA', 'fault namesake') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Grayson County, VA</div>
+    <div class="popup-title">Fries, Virginia</div>
+    <div class="popup-age">New River mill town &nbsp;·&nbsp; Grayson County</div>
+    <div class="popup-body">The Fries Thrust Fault is named for this town on the New River. The fault passes directly through this area as it runs southwest from Montgomery County toward the Virginia–North Carolina border. Fries sits in the valley carved partly by the fault's structural influence on local drainage — the New River follows the fault corridor for a portion of its path through this region.</div>
+    <div class="popup-fact">Population 484 (2010). The town's name is pronounced "freeze." The fault trace passes through Grayson County just northeast of town.</div>
+  `);
+
+// ROCKFISH GAP — northern terminus
+L.marker([38.032, -78.858], { icon: makeDot('#5B8DB8', 12, 'Rockfish Gap, VA', 'I-64 / northern terminus', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Rockfish Valley fault zone &nbsp;·&nbsp; Nelson/Augusta Counties, VA</div>
+    <div class="popup-title">Rockfish Gap</div>
+    <div class="popup-age">Northern terminus of the HFRV system &nbsp;·&nbsp; Elevation 1,903 ft</div>
+    <div class="popup-body">The point where I-64 and US Route 250 cross the Blue Ridge — and where the Rockfish Valley fault zone reaches its northern mapped extent. The gap itself is carved partly by the structural weakness along the fault zone. Skyline Drive ends here; the Blue Ridge Parkway begins. The fault boundary between the Pedlar Massif to the northwest and Lovingston Massif to the southeast runs through this corridor.</div>
+    <div class="popup-fact">Site of the 1818 meeting where Jefferson, Madison, Monroe, and Marshall selected Charlottesville as the location for the University of Virginia.</div>
+  `);
+
+// ROCKFISH RIVER OUTCROP — W&M field site
+L.marker([37.879, -78.893], { icon: makeDot('#5B8DB8', 13, 'Rockfish River, VA', '1.2 Ga · W&M field site') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Rockfish Valley fault zone &nbsp;·&nbsp; Nelson County, VA</div>
+    <div class="popup-title">Rockfish River Gneiss Outcrop</div>
+    <div class="popup-age">~1.2 billion years old &nbsp;·&nbsp; Grenville-age</div>
+    <div class="popup-body">Grenvillian biotite granitoid gneiss exposed along the Rockfish River — the northeastern counterpart to the Little River exposure at Riner. The same mylonitic deformation documented by Whitmarsh at the Little River is independently documented here: well-foliated porphyroclastic mylonite derived from Grenvillian biotite granitoid, 130 miles to the northeast on the same fault system.</div>
+    <div class="popup-fact">A William &amp; Mary geology field site for 25+ years. Virginia's humid climate aggressively covers fresh rock — geologists have resorted to power-washing this outcrop to keep it legible. No such intervention needed at Riner, where the active Little River channel keeps the exposure clean.</div>
+  `);
+
+// LOVINGSTON — Lovingston Massif namesake
+L.marker([37.762, -78.967], { icon: makeDot('#6B5A3A', 10, 'Lovingston, VA', 'Lovingston Massif', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Rockfish Valley fault zone &nbsp;·&nbsp; Nelson County, VA</div>
+    <div class="popup-title">Lovingston, Virginia</div>
+    <div class="popup-age">Nelson County seat &nbsp;·&nbsp; Lovingston Massif namesake</div>
+    <div class="popup-body">The southeastern half of the Grenville basement split by the HFRV fault system is called the Lovingston Massif — named for this Nelson County town. The Massif extends southeast of the fault trace and includes rock types such as Stage Road Gneiss, Grenville intrusives, diorites, charnockites, and anorthosites. The town sits in the Rockfish Valley, carved along the fault zone.</div>
+  `);
+
+// FLOYD, VA
+L.marker([36.907, -80.315], { icon: makeDot('#6B5A3A', 10, 'Floyd, VA', '', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Floyd County, VA</div>
+    <div class="popup-title">Floyd, Virginia</div>
+    <div class="popup-age">Floyd County seat &nbsp;·&nbsp; Blue Ridge plateau</div>
+    <div class="popup-body">Floyd County sits astride the Fries Fault zone. The fault trace passes through northern Floyd County, where mafic dikes and sills intruding through Precambrian basement rocks — documented by Patti Boyd Kaygi's structural field maps — mark the fault's path. The county's high plateau landscape is partly a product of the resistant Grenville basement rock the fault has brought near the surface.</div>
+    <div class="popup-fact">The nickel prospects at Lick Fork in northern Floyd County are hosted by mafic and ultramafic rocks intruding medium-grained metamorphic rocks on the north side of the Fries Fault zone.</div>
+  `);
+
+// HILLSVILLE, VA — Carroll County seat near fault trace
+L.marker([36.764, -80.735], { icon: makeDot('#6B5A3A', 10, 'Hillsville, VA', '', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Fries fault &nbsp;·&nbsp; Carroll County, VA</div>
+    <div class="popup-title">Hillsville, Virginia</div>
+    <div class="popup-age">Carroll County seat &nbsp;·&nbsp; Elevation 2,569 ft</div>
+    <div class="popup-body">The Fries Fault trace passes through Carroll County southwest of Hillsville as it follows the Blue Ridge axis toward the Virginia–North Carolina border. The high plateau terrain of Carroll County — one of the highest county seats in Virginia — sits on the same Grenville basement exposed at Riner, here covered by a thicker veneer of younger material.</div>
+  `);
+
+// CLYDE, NC — Burnsville fault intersection point
+L.marker([35.534, -82.916], { icon: makeDot('#7B6B4A', 10, 'Clyde, NC', 'Burnsville fault crossing', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Hayesville fault &nbsp;·&nbsp; Haywood County, NC</div>
+    <div class="popup-title">Clyde, North Carolina</div>
+    <div class="popup-age">Haywood County &nbsp;·&nbsp; Key structural intersection</div>
+    <div class="popup-body">The Clyde 7.5-minute quadrangle is where the younger Neoacadian Burnsville fault intersects and overprints the Hayesville fault. Bedrock mapping here documented the Burnsville fault an additional 40 km southwest of its previously known extent. This is a key location for understanding the structural complexity of the southern Appalachians — multiple fault generations overlapping in the same rock.</div>
+    <div class="popup-fact">Langille et al. (2020) — the Burnsville fault overprints the Hayesville fault here, both older Taconic structures. The spatial relationship between these faults remains an active area of research.</div>
+  `);
+
+// HAYESVILLE, NC — southwestern terminus
+L.marker([35.046, -83.818], { icon: makeDot('#7B6B4A', 13, 'Hayesville, NC', 'SW terminus · Clay County') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Hayesville fault &nbsp;·&nbsp; Clay County, NC &nbsp;·&nbsp; Southwestern terminus</div>
+    <div class="popup-title">Hayesville, North Carolina</div>
+    <div class="popup-age">1.1 – 1.3 billion years &nbsp;·&nbsp; Grenville basement</div>
+    <div class="popup-body">The southwestern terminus of the HFRV fault system as a named structure. The Hayesville fault here separates eastern Blue Ridge assemblages from the Ocoee Supergroup units and western Blue Ridge basement. Grenville basement is thrust over the Cartoogechaye terrane along this contact — the same fundamental event recorded at Riner, 300 miles to the northeast.</div>
+    <div class="popup-fact">The Hiwassee River flows along the outskirts of Hayesville. The fault trace continues southwest as the Chattahoochee fault into Georgia, though the structural relationship between these segments is debated.</div>
+  `);
+
+// OLD RAG MOUNTAIN
+L.marker([38.550, -78.300], { icon: makeDot('#8B4513', 11, 'Old Rag Mtn, VA', '1.0–1.1 Ga · Shenandoah', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Blue Ridge Grenville exposure &nbsp;·&nbsp; Madison County, VA</div>
+    <div class="popup-title">Old Rag Mountain</div>
+    <div class="popup-age">1.0 – 1.1 billion years old &nbsp;·&nbsp; Grenville granite</div>
+    <div class="popup-body">The most heavily visited ancient rock outcrop in Virginia. Old Rag exposes Grenville-age granite — the same age and origin as the Little River Gneiss at Riner, but granite rather than gneiss (igneous rather than metamorphic). Both formed during the Grenville Orogeny and the assembly of Rodinia. Old Rag's rock is part of the Pedlar Massif — the northwestern block of the Grenville basement divided by the HFRV fault system.</div>
+    <div class="popup-fact">Shenandoah National Park. The summit loop trail is one of Virginia's most popular hikes. The blue quartz crystals in the Old Rag Granite incorporate titanium-rich minerals ilmenite and rutile.</div>
+  `);
+
+// ── PEER COMPARISON SITES ──────────────────────────────────────
+
+L.marker([36.10, -112.10], { icon: makeDot('#3B6E9E', 13, 'Grand Canyon, AZ', '1.7–1.8 Ga · older', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Peer comparison &nbsp;·&nbsp; Older than Riner by ~500 Ma</div>
+    <div class="popup-title">Grand Canyon, Arizona</div>
+    <div class="popup-age">1.7 – 1.8 billion years old &nbsp;·&nbsp; Vishnu Basement Rocks</div>
+    <div class="popup-body">The Vishnu Basement Rocks — schist, gneiss, and granite at the bottom of the inner gorge — are older than the Little River Gneiss by roughly 500 million years. They formed during island-arc collisions that built the early southwestern continental margin, not the Grenville collision that formed the Blue Ridge basement. The Grand Canyon's rock is frequently cited as the benchmark for accessible ancient rock — but it requires a multi-day river expedition or a grueling rim-to-river hike to reach it.</div>
+    <div class="popup-fact">The Great Unconformity here represents a gap of over 1 billion years between the Vishnu Basement Rocks below and the Tapeats Sandstone above — one of the most dramatic geological discontinuities visible on Earth's surface.</div>
+  `);
+
+L.marker([38.57, -107.72], { icon: makeDot('#3B6E9E', 13, 'Black Canyon, CO', '1.8 Ga · older', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Peer comparison &nbsp;·&nbsp; Older than Riner by ~600 Ma</div>
+    <div class="popup-title">Black Canyon of the Gunnison, Colorado</div>
+    <div class="popup-age">~1.8 billion years old &nbsp;·&nbsp; Precambrian gneiss and schist</div>
+    <div class="popup-body">The Gunnison River has cut one of the deepest, narrowest gorges in North America through nearly 2 billion year old Precambrian gneiss and schist. The rock here predates the Grenville Orogeny and represents an earlier phase of continental assembly. Visible from the canyon rim and accessible by trail into the gorge — more accessible than the Grand Canyon's inner gorge, but still requiring significant effort.</div>
+    <div class="popup-fact">The canyon walls are so steep and narrow that some sections receive less than 33 minutes of sunlight per day. The painted wall — the tallest cliff face in Colorado at 2,250 feet — is striped with pegmatite intrusions cutting through the ancient gneiss.</div>
+  `);
+
+L.marker([44.55, -94.98], { icon: makeDot('#3B6E9E', 13, 'Morton Gneiss, MN', '3.6 Ga · oldest in US', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Peer comparison &nbsp;·&nbsp; Oldest exposed rock in the United States</div>
+    <div class="popup-title">Morton Gneiss, Minnesota</div>
+    <div class="popup-age">3.6 billion years old &nbsp;·&nbsp; Archean</div>
+    <div class="popup-body">The oldest exposed rock in the United States — three times older than the Little River Gneiss. The Morton Gneiss formed deep in the Archean core of Laurentia, long before the continent had its present shape. Exposed along the Minnesota River Valley near Morton, Minnesota, and roadside accessible. While the Adirondacks and Blue Ridge formed in Grenville-age collisions, the Morton Gneiss predates those events by over 2 billion years.</div>
+    <div class="popup-fact">The gneiss has been quarried and used as a building stone — its distinctive pink and gray swirling pattern has appeared in buildings across the Midwest. A sign near the outcrop formerly claimed it as the oldest rock in the US; recent discoveries of slightly older material elsewhere in the country have complicated that claim.</div>
+  `);
+
+L.marker([41.05, -112.20], { icon: makeDot('#3B6E9E', 13, 'Antelope Island, UT', '2.4 Ga · older', 'left') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Peer comparison &nbsp;·&nbsp; Older than Riner by ~1.2 Ga</div>
+    <div class="popup-title">Antelope Island, Utah</div>
+    <div class="popup-age">2.4 billion years old &nbsp;·&nbsp; Farmington Canyon Complex</div>
+    <div class="popup-body">The Farmington Canyon Complex gneiss exposed on Antelope Island in Great Salt Lake and in the Wasatch Range east of Ogden. Zircon ages of about 2.4 billion years place it in the Paleoproterozoic — over twice the age of the Little River Gneiss. The rock was subjected to a major metamorphic event 1.7 billion years ago when the Grouse Creek block collided with the North American craton. Accessible via the Frary Peak trail on Antelope Island State Park.</div>
+    <div class="popup-fact">Antelope Island is the largest island in Great Salt Lake. The exposed gneiss on the island's high ridges gives it a distinctive rocky character visible from the mainland shore 7 miles away.</div>
+  `);
+
+L.marker([44.10, -74.20], { icon: makeDot('#3B6E9E', 13, 'Adirondacks, NY', '1.0–1.3 Ga · same age', 'right') })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-segment">Peer comparison &nbsp;·&nbsp; Same age, same orogeny</div>
+    <div class="popup-title">Adirondack Mountains, New York</div>
+    <div class="popup-age">1.0 – 1.3 billion years old &nbsp;·&nbsp; Grenville-age</div>
+    <div class="popup-body">The closest true peer to the Little River Gneiss — same Grenville Orogeny, same age range, same fundamental origin. The Adirondacks are a dome of Grenville-age basement rock pushed to the surface by later tectonic events, forming the only major mountain range in the eastern US whose core is Precambrian rather than Appalachian. Accessible by car at numerous roadcuts and river exposures throughout the Adirondack upland.</div>
+    <div class="popup-fact">The same 1.1 billion year old rock that forms the Little River Gneiss at Riner also underlies the Adirondacks — two surface exposures of the same ancient crust, 600 miles apart. The Grenville suture that became the HFRV fault is the structural scar between the Pedlar and Lovingston massifs; the Adirondacks sit on the same Grenville province east of that suture.</div>
+  `);
+
+// ── NAVIGATION CONTROLS ─────────────────────────────────────────
+const NavControl = L.Control.extend({
+  options: { position: 'bottomright' },
+  onAdd: function() {
+    const div = L.DomUtil.create('div', '');
+    div.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:8px;">
+        <button onclick="map.fitBounds([[34.5,-84.5],[38.3,-78.5]],{padding:[60,60]})" style="
+          font-family:'Inconsolata',monospace;font-size:0.66rem;letter-spacing:0.1em;
+          text-transform:uppercase;background:rgba(44,31,15,0.93);color:#d4bc98;
+          border:1px solid rgba(212,188,152,0.2);padding:7px 12px;border-radius:3px;
+          cursor:pointer;display:block;width:100%;text-align:left;">Fault corridor view</button>
+        <button onclick="map.setView([39.5,-96],4)" style="
+          font-family:'Inconsolata',monospace;font-size:0.66rem;letter-spacing:0.1em;
+          text-transform:uppercase;background:rgba(44,31,15,0.93);color:#d4bc98;
+          border:1px solid rgba(212,188,152,0.2);padding:7px 12px;border-radius:3px;
+          cursor:pointer;display:block;width:100%;text-align:left;">National view</button>
+      </div>`;
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+  }
+});
+new NavControl().addTo(map);
+
+// Open on fault corridor
+setTimeout(() => {
+  map.fitBounds([[34.5, -84.5], [38.3, -78.5]], { padding: [70, 70] });
+}, 300);
+
+</script>
+</body>
+</html>
