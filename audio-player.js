@@ -1,6 +1,6 @@
 /**
  * audio-player.js
- * Freeze Thrust Fault — Full Site Audio Player
+ * Fries Thrust Fault — Full Site Audio Player
  * Drop-in floating player bar for index.html
  * Matches site palette: dark backgrounds, earth-tone accents, Playfair Display / Source Serif 4
  */
@@ -18,7 +18,7 @@
       anchor: '#intro',
       segs: [
         {
-          title: 'The Freeze Thrust Fault',
+          title: 'The Fries Thrust Fault',
           text: 'There is a scar running through Virginia. It is the structural spine of the entire Blue Ridge — 300 miles long, older than the Appalachians, older than fish, older than anything that has ever left a footprint on this earth. It runs from central Virginia south into North Carolina. It runs through Shenandoah. It runs through the Great Smoky Mountains corridor. And it runs through land along Laurel Ridge Mill Road in Riner, Virginia. The rock it exposes is between 1.1 and 1.3 billion years old.'
         }
       ]
@@ -69,7 +69,7 @@
         },
         {
           title: 'What came after — and how much later',
-          text: 'Consider the sequence of what followed. Around 750 million years ago, Rodinia broke apart. The rock was already 400 to 500 million years old. Around 480 million years ago, the Taconic Ore-ig-any began building the first Appalachian Mountains — the rock was already 700 million years old. Around 300 million years ago, Africa collided with North America and the modern Appalachian landform took shape — the rock was already 800 to 900 million years old. Around 180 million years ago, the Atlantic Ocean opened and dinosaurs walked the Earth — the rock was already 1 billion years old. Sixty-six million years ago, the dinosaurs died. The rock has now been in the ground for over a billion years. Today, the rock is at the surface. You can touch it. It is in Riner, Virginia.'
+          text: 'Consider the sequence of what followed. Around 750 million years ago, Rodinia broke apart. The rock was already 400 to 500 million years old. Around 480 million years ago, the Taconic Orogeny began building the first Appalachian Mountains — the rock was already 700 million years old. Around 300 million years ago, Africa collided with North America and the modern Appalachian landform took shape — the rock was already 800 to 900 million years old. Around 180 million years ago, the Atlantic Ocean opened and dinosaurs walked the Earth — the rock was already 1 billion years old. Sixty-six million years ago, the dinosaurs died. The rock has now been in the ground for over a billion years. Today, the rock is at the surface. You can touch it. It is in Riner, Virginia.'
         }
       ]
     },
@@ -79,28 +79,28 @@
       anchor: '#movement3',
       segs: [
         {
-          title: 'You know Pan-gee-ah. This rock is older than that.',
-          text: 'Anyone with a passing interest in science has heard of Pan-gee-ah — the supercontinent where all the landmasses were joined together. It existed from roughly 335 to 175 million years ago, and its breakup opened the Atlantic Ocean. It feels ancient. It is not nearly old enough. The rock along Laurel Ridge Mill Road formed during the assembly of a different supercontinent entirely: Rodinia. It existed from roughly 1.2 billion to 750 million years ago — assembled by the same kind of continent-to-continent collision that built Pan-gee-ah, but 900 million years earlier. The collision that produced it — the Grenville Ore-ig-any — built a mountain range comparable in scale to the modern Himalayas along what is now the eastern margin of North America. The rock exposed at the Freeze Fault is the deeply eroded root of those mountains. By the time Pan-gee-ah was forming, Rodinia had already assembled, broken apart, and been gone for hundreds of millions of years.'
+          title: 'You know Pangaea. This rock is older than that.',
+          text: 'Anyone with a passing interest in science has heard of Pangaea — the supercontinent where all the landmasses were joined together. It existed from roughly 335 to 175 million years ago, and its breakup opened the Atlantic Ocean. It feels ancient. It is not nearly old enough. The rock along Laurel Ridge Mill Road formed during the assembly of a different supercontinent entirely: Rodinia. It existed from roughly 1.2 billion to 750 million years ago — assembled by the same kind of continent-to-continent collision that built Pangaea, but 900 million years earlier. The collision that produced it — the Grenville Orogeny — built a mountain range comparable in scale to the modern Himalayas along what is now the eastern margin of North America. The rock exposed at the Fries Fault is the deeply eroded root of those mountains. By the time Pangaea was forming, Rodinia had already assembled, broken apart, and been gone for hundreds of millions of years.'
         },
         {
-          title: 'Laurentia: The Cray-tahn',
-          text: 'To understand what follows, one concept is essential: Laurentia. Laurentia is the name geologists give to the ancient stable core of what would eventually become North America. Geologists call it a cray-tahn: the thick, tectonically quiet, ancient foundation around which younger rock accretes over billions of years. Think of it as the original continent, onto which everything else was later added. The rock at the Freeze Fault formed at the eastern margin of Laurentia — the boundary where new material was being added, where ocean was closing, where mountains were being built.'
+          title: 'Laurentia: The Craton',
+          text: 'To understand what follows, one concept is essential: Laurentia. Laurentia is the name geologists give to the ancient stable core of what would eventually become North America. Geologists call it a craton: the thick, tectonically quiet, ancient foundation around which younger rock accretes over billions of years. Think of it as the original continent, onto which everything else was later added. The rock at the Fries Fault formed at the eastern margin of Laurentia — the boundary where new material was being added, where ocean was closing, where mountains were being built.'
         },
         {
-          title: 'The Eye-ap-it-us Ocean',
-          text: 'When Rodinia broke apart, it opened an ocean. Not the Atlantic — that came much later. This was the Eye-ap-it-us Ocean, a vast body of water that separated the fragments of Rodinia and eventually covered what is now the eastern United States. You have never heard of the Eye-ap-it-us Ocean because it no longer exists. It closed. The closing of the Eye-ap-it-us Ocean — as the landmasses converged again toward Pan-gee-ah — drove the Taconic Ore-ig-any, which reactivated the Freeze Fault and pushed this billion-year-old rock upward to where it sits today. The sequence, in full: the rock forms during the Grenville Ore-ig-any and the assembly of Rodinia. Rodinia breaks apart, the Eye-ap-it-us Ocean opens. The Eye-ap-it-us Ocean closes, driving the Taconic Ore-ig-any, which reactivates the Freeze Fault. The fault pushes the rock to the surface. Erosion strips the overburden away. The Little River cuts through. And here we are. The ocean you have never heard of is why the rock is here.'
+          title: 'The Iapetus Ocean',
+          text: 'When Rodinia broke apart, it opened an ocean. Not the Atlantic — that came much later. This was the Iapetus Ocean, a vast body of water that separated the fragments of Rodinia and eventually covered what is now the eastern United States. You have never heard of the Iapetus Ocean because it no longer exists. It closed. The closing of the Iapetus Ocean — as the landmasses converged again toward Pangaea — drove the Taconic Orogeny, which reactivated the Fries Fault and pushed this billion-year-old rock upward to where it sits today. The sequence, in full: the rock forms during the Grenville Orogeny and the assembly of Rodinia. Rodinia breaks apart, the Iapetus Ocean opens. The Iapetus Ocean closes, driving the Taconic Orogeny, which reactivates the Fries Fault. The fault pushes the rock to the surface. Erosion strips the overburden away. The Little River cuts through. And here we are. The ocean you have never heard of is why the rock is here.'
         },
         {
           title: 'What Is a Thrust Fault?',
-          text: 'A fault is any fracture in the Earth\'s crust along which two bodies of rock have moved relative to each other. A thrust fault is formed by compressional forces — when two landmasses are being pushed together, the crust has nowhere to go but up. One slab of rock is driven up and over another at a low angle, typically less than 45 degrees from horizontal. The result is that older, deeper rock ends up sitting on top of younger, shallower rock — a reversal of the normal geological order called an overthrust. Of the six known thrust faults in the Riner Quadrangle geologic map area, only four surface: the Freeze, Poor Mountain, Peak Creek, and Roanoke Valley faults. Two others — the Saltville and Pulaski faults — underlie the surface rocks entirely, invisible except to those who know how to read the rock record.'
+          text: 'A fault is any fracture in the Earth\'s crust along which two bodies of rock have moved relative to each other. A thrust fault is formed by compressional forces — when two landmasses are being pushed together, the crust has nowhere to go but up. One slab of rock is driven up and over another at a low angle, typically less than 45 degrees from horizontal. The result is that older, deeper rock ends up sitting on top of younger, shallower rock — a reversal of the normal geological order called an overthrust. Of the six known thrust faults in the Riner Quadrangle geologic map area, only four surface: the Fries, Poor Mountain, Peak Creek, and Roanoke Valley faults. Two others — the Saltville and Pulaski faults — underlie the surface rocks entirely, invisible except to those who know how to read the rock record.'
         },
         {
-          title: 'Why the Freeze Fault Stands Apart',
-          text: 'What makes the Freeze Fault remarkable is not that it is a thrust fault but what it exposes, where it runs, and how old it is. The Freeze Thrust Fault is one of three major fault zones that run the full length of the Virginia Blue Ridge, forming the structural backbone of one of the state\'s five distinct physiographic regions. The Blue Ridge Province stretches from Pennsylvania to Georgia in a narrow, ancient corridor that includes Shenandoah National Park, the Blue Ridge Parkway, the Appalachian National Scenic Trail, and the Great Smoky Mountains. The exposed rock at the Freeze Fault is among the oldest material found anywhere in Virginia, and one of only a small number of places in the continental United States where Precambrian rock of this age is visible at the surface. The Grand Canyon\'s inner gorge, the Minnesota River Valley, and the Adirondack Mountains are the most familiar comparisons; the Freeze Fault belongs in that same category.'
+          title: 'Why the Fries Fault Stands Apart',
+          text: 'What makes the Fries Fault remarkable is not that it is a thrust fault but what it exposes, where it runs, and how old it is. The Fries Thrust Fault is one of three major fault zones that run the full length of the Virginia Blue Ridge, forming the structural backbone of one of the state\'s five distinct physiographic regions. The Blue Ridge Province stretches from Pennsylvania to Georgia in a narrow, ancient corridor that includes Shenandoah National Park, the Blue Ridge Parkway, the Appalachian National Scenic Trail, and the Great Smoky Mountains. The exposed rock at the Fries Fault is among the oldest material found anywhere in Virginia, and one of only a small number of places in the continental United States where Precambrian rock of this age is visible at the surface. The Grand Canyon\'s inner gorge, the Minnesota River Valley, and the Adirondack Mountains are the most familiar comparisons; the Fries Fault belongs in that same category.'
         },
         {
           title: 'From Shale to Gneiss: Metamorphic Transformation',
-          text: 'The rock exposed at the Freeze Fault is gneiss — a coarse-grained, banded metamorphic rock that forms under conditions of extreme temperature and pressure. When rocks are buried deep in the Earth\'s crust — typically 10 to 30 kilometers down — they do not melt. Instead, they recrystallize in the solid state. This process is called regional metamorphism. Starting from shale, the metamorphic progression runs: shale, then slate, then phyllite, then schist, then gneiss. Each step represents higher temperature and pressure and more complete recrystallization. Gneiss, at the end of the progression, is the highest-grade regional metamorphic rock, characterized by a pronounced banding — called foliation — that reflects billions of years of compression. The gneiss at the Freeze Fault formed this way during the Grenville Ore-ig-any, as the collision drove rocks deep into the crust.'
+          text: 'The rock exposed at the Fries Fault is gneiss — a coarse-grained, banded metamorphic rock that forms under conditions of extreme temperature and pressure. When rocks are buried deep in the Earth\'s crust — typically 10 to 30 kilometers down — they do not melt. Instead, they recrystallize in the solid state. This process is called regional metamorphism. Starting from shale, the metamorphic progression runs: shale, then slate, then phyllite, then schist, then gneiss. Each step represents higher temperature and pressure and more complete recrystallization. Gneiss, at the end of the progression, is the highest-grade regional metamorphic rock, characterized by a pronounced banding — called foliation — that reflects billions of years of compression. The gneiss at the Fries Fault formed this way during the Grenville Orogeny, as the collision drove rocks deep into the crust.'
         }
       ]
     },
@@ -111,19 +111,19 @@
       segs: [
         {
           title: 'Where the Fault Meets the Surface',
-          text: 'The Freeze Thrust Fault does not announce itself. It runs underground for most of its length — buried beneath younger rock, invisible at the surface. But in the Riner area of Montgomery and Floyd Counties, erosion has stripped enough of the overburden away that the fault boundary reaches the ground. The Little River cuts directly through that exposure zone, crossing the fault trace twice as it bends through two meander loops between the Route 8 and Brush Creek bridges. This is what makes the local geography significant. Not the river itself, but what the river has done: cut down through hundreds of millions of years of accumulated rock until it reached the fault plane, and exposed, at water level and along the banks, gneiss that is 1.1 to 1.3 billion years old. Touchable. Walkable.'
+          text: 'The Fries Thrust Fault does not announce itself. It runs underground for most of its length — buried beneath younger rock, invisible at the surface. But in the Riner area of Montgomery and Floyd Counties, erosion has stripped enough of the overburden away that the fault boundary reaches the ground. The Little River cuts directly through that exposure zone, crossing the fault trace twice as it bends through two meander loops between the Route 8 and Brush Creek bridges. This is what makes the local geography significant. Not the river itself, but what the river has done: cut down through hundreds of millions of years of accumulated rock until it reached the fault plane, and exposed, at water level and along the banks, gneiss that is 1.1 to 1.3 billion years old. Touchable. Walkable.'
         },
         {
           title: 'Three Windows on the Same Fault',
-          text: 'The Little River exposure is one of three places along the 300-mile length of the Hayesville–Freeze–Rockfish Valley fault system where Grenville-age gneiss reaches the surface and can be examined directly. At the northeastern end of the system, in Nelson County, Virginia, the Rockfish River has cut down through the Rockfish Valley fault zone to expose Grenville-age gneiss along its banks — a William and Mary geology field site for over 25 years. Geologists have resorted to power-washing it to keep it legible against Virginia\'s plant succession. No such intervention is needed at the Little River, where the active channel keeps the exposure clean. At the southwestern end, in western North Carolina, the Hayesville fault exposes Grenville basement complex — identical in composition and origin to the rock at Riner. The Riner exposure sits roughly in the center of this corridor. What distinguishes it is access. You are standing at one of three points along a 300-mile structural feature where the deep basement of the continent is within reach.'
+          text: 'The Little River exposure is one of three places along the 300-mile length of the Hayesville–Fries–Rockfish Valley fault system where Grenville-age gneiss reaches the surface and can be examined directly. At the northeastern end of the system, in Nelson County, Virginia, the Rockfish River has cut down through the Rockfish Valley fault zone to expose Grenville-age gneiss along its banks — a William and Mary geology field site for over 25 years. Geologists have resorted to power-washing it to keep it legible against Virginia\'s plant succession. No such intervention is needed at the Little River, where the active channel keeps the exposure clean. At the southwestern end, in western North Carolina, the Hayesville fault exposes Grenville basement complex — identical in composition and origin to the rock at Riner. The Riner exposure sits roughly in the center of this corridor. What distinguishes it is access. You are standing at one of three points along a 300-mile structural feature where the deep basement of the continent is within reach.'
         },
         {
           title: 'Reading the Geological Map',
-          text: 'The fault\'s path through this area is documented on a state geological map of the Riner Quadrangle compiled by geologist Bill Henika, a Research Professor at Virginia Tech. An annotated version of this map shows the fault trace labeled clearly as the Freeze Thrust Fault, running directly through the meander loops of the Little River. On a geological map, the exposure shows as a narrow pink band threading through the Riner Quadrangle — narrow but continuous, marking the surface expression of rock that formed a billion years ago. On the ground, it is the rock beneath your feet.'
+          text: 'The fault\'s path through this area is documented on a state geological map of the Riner Quadrangle compiled by geologist Bill Henika, a Research Professor at Virginia Tech. An annotated version of this map shows the fault trace labeled clearly as the Fries Thrust Fault, running directly through the meander loops of the Little River. On a geological map, the exposure shows as a narrow pink band threading through the Riner Quadrangle — narrow but continuous, marking the surface expression of rock that formed a billion years ago. On the ground, it is the rock beneath your feet.'
         },
         {
           title: 'The Significance of the Fault\'s Margin',
-          text: 'The rocks exposed at the Freeze Fault are not merely old. They are remnants of the edge of a supercontinent. Around 1.3 billion years ago, the landmass that would eventually become North America — called Laurentia — was involved in a massive continental collision that assembled a supercontinent known as Rodinia. The collision zone, called the Grenville Ore-ig-any, built a mountain range comparable in scale to the modern Himalayas along what is now the eastern margin of the continent. The rocks exposed today at the Freeze Fault are the deeply eroded roots of those mountains, brought back to the surface after more than a billion years underground by the thrust fault\'s action. When you stand on the bank of the Little River in Riner and look at the exposed rock, you are looking at material that formed in the core of an ancient mountain range built during the assembly of a supercontinent that no longer exists.'
+          text: 'The rocks exposed at the Fries Fault are not merely old. They are remnants of the edge of a supercontinent. Around 1.3 billion years ago, the landmass that would eventually become North America — called Laurentia — was involved in a massive continental collision that assembled a supercontinent known as Rodinia. The collision zone, called the Grenville Orogeny, built a mountain range comparable in scale to the modern Himalayas along what is now the eastern margin of the continent. The rocks exposed today at the Fries Fault are the deeply eroded roots of those mountains, brought back to the surface after more than a billion years underground by the thrust fault\'s action. When you stand on the bank of the Little River in Riner and look at the exposed rock, you are looking at material that formed in the core of an ancient mountain range built during the assembly of a supercontinent that no longer exists.'
         }
       ]
     },
@@ -133,16 +133,16 @@
       anchor: '#movement5',
       segs: [
         {
-          title: 'The Hayesville–Freeze–Rockfish Valley Fault System',
-          text: 'The Freeze Fault does not stand alone. It is the local expression of one of the great structural features of the eastern Appalachians: the Hayesville-Freeze-Rockfish Valley fault system, which runs the full axial length of the Blue Ridge from central Virginia southward through North Carolina. The HFRV is, in a meaningful sense, the spine of the Blue Ridge. It divides the Grenville-age basement rocks of the province into two distinct massifs: the Pedlar Massif to the northwest and the Lovingston Massif to the southeast. These represent two crustal blocks that were separate landmasses before the Grenville collision welded them together roughly 1.1 billion years ago. The HFRV fault running between them is almost certainly the original suture line: the scar where those two blocks fused. It was later reactivated during the Taconic Ore-ig-any, approximately 480 to 440 million years ago. The New River — one of the oldest river systems in North America — follows the Freeze Fault for a stretch of its path through this area.'
+          title: 'The Hayesville–Fries–Rockfish Valley Fault System',
+          text: 'The Fries Fault does not stand alone. It is the local expression of one of the great structural features of the eastern Appalachians: the Hayesville-Fries-Rockfish Valley fault system, which runs the full axial length of the Blue Ridge from central Virginia southward through North Carolina. The HFRV is, in a meaningful sense, the spine of the Blue Ridge. It divides the Grenville-age basement rocks of the province into two distinct massifs: the Pedlar Massif to the northwest and the Lovingston Massif to the southeast. These represent two crustal blocks that were separate landmasses before the Grenville collision welded them together roughly 1.1 billion years ago. The HFRV fault running between them is almost certainly the original suture line: the scar where those two blocks fused. It was later reactivated during the Taconic Orogeny, approximately 480 to 440 million years ago. The New River — one of the oldest river systems in North America — follows the Fries Fault for a stretch of its path through this area.'
         },
         {
           title: 'Laurentia: The Growth Rings of a Continent',
-          text: 'Laurentia — the ancient cray-tahn at the core of North America — did not form all at once. It grew outward over billions of years in a series of distinct accretion events, each one adding a new belt of rock to the growing continent. The oldest material, aged 3.0 to 2.5 billion years, forms the core of what is now central Canada. Younger belts wrap around this core in successive rings. The outermost belt — the one that includes the Freeze Fault — is the Grenville province, aged approximately 1.2 to 0.9 billion years. It runs along what was then the eastern margin of Laurentia: the collision zone. The rock at the Little River is the outermost growth ring of the original continent.'
+          text: 'Laurentia — the ancient craton at the core of North America — did not form all at once. It grew outward over billions of years in a series of distinct accretion events, each one adding a new belt of rock to the growing continent. The oldest material, aged 3.0 to 2.5 billion years, forms the core of what is now central Canada. Younger belts wrap around this core in successive rings. The outermost belt — the one that includes the Fries Fault — is the Grenville province, aged approximately 1.2 to 0.9 billion years. It runs along what was then the eastern margin of Laurentia: the collision zone. The rock at the Little River is the outermost growth ring of the original continent.'
         },
         {
           title: 'Whitmarsh (1994): The Defining Academic Description',
-          text: 'The most precise published description of this specific fault zone comes from a 1994 Virginia Tech thesis by Richard Whitmarsh, who conducted detailed structural field work along the Freeze Fault south of Riner. His definition remains the standard academic characterization of what is happening in the rock beneath the Little River. In his words: The Freeze fault zone south of Riner, Virginia is marked by a ductile, greenschist-facies thrust that places Middle Proterozoic gneiss over deformed Late Proterozoic — Early Paleozoic rocks of the western Blue Ridge province. Ductile thrust refers to plastic rather than brittle deformation — the fault formed deep in the crust where rocks flow under heat and pressure rather than fracture. Greenschist-facies describes moderate metamorphic conditions, roughly 300 to 500 degrees Celsius. The phrase Middle Proterozoic gneiss over deformed Late Proterozoic rocks captures the core of the fault\'s significance: older rock thrust over younger rock, reversing the expected stratigraphic order.'
+          text: 'The most precise published description of this specific fault zone comes from a 1994 Virginia Tech thesis by Richard Whitmarsh, who conducted detailed structural field work along the Fries Fault south of Riner. His definition remains the standard academic characterization of what is happening in the rock beneath the Little River. In his words: The Fries fault zone south of Riner, Virginia is marked by a ductile, greenschist-facies thrust that places Middle Proterozoic gneiss over deformed Late Proterozoic — Early Paleozoic rocks of the western Blue Ridge province. Ductile thrust refers to plastic rather than brittle deformation — the fault formed deep in the crust where rocks flow under heat and pressure rather than fracture. Greenschist-facies describes moderate metamorphic conditions, roughly 300 to 500 degrees Celsius. The phrase Middle Proterozoic gneiss over deformed Late Proterozoic rocks captures the core of the fault\'s significance: older rock thrust over younger rock, reversing the expected stratigraphic order.'
         },
         {
           title: 'Radiometric Dating of the Little River Gneiss',
@@ -410,7 +410,7 @@
       <div id="ftf-bar-left">
         <span id="ftf-bar-dot"></span>
         <span id="ftf-bar-section">Audio</span>
-        <span id="ftf-bar-title">The Freeze Thrust Fault — Site Audio</span>
+        <span id="ftf-bar-title">The Fries Thrust Fault — Site Audio</span>
       </div>
       <button id="ftf-collapse-toggle" title="Hide/show player">Hide ▼</button>
     </div>
@@ -516,9 +516,25 @@
     }
     const sec = SECTIONS[curSec];
     const seg = sec.segs[curSeg];
-    const text = seg.title + '. ' + seg.text;
+    let text = seg.title + '. ' + seg.text;
 
-    const u = new SpeechSynthesisUtterance(text);
+    // Apply pronunciation mappings while keeping original spelling in display
+    const pronunciationMap = {
+      'Fries': 'Freeze',
+      'Pangaea': 'Pan-gee-ah',
+      'craton': 'cray-tahn',
+      'Iapetus': 'Eye-ap-it-us',
+      'Orogeny': 'Ore-ig-any'
+    };
+
+    // Create phonetic version for speech synthesis
+    let phoneticText = text;
+    for (const [original, phonetic] of Object.entries(pronunciationMap)) {
+      const regex = new RegExp(`\\b${original}\\b`, 'gi');
+      phoneticText = phoneticText.replace(regex, phonetic);
+    }
+
+    const u = new SpeechSynthesisUtterance(phoneticText);
     u.rate = rate;
     u.pitch = 0.95;
     u.volume = 1.0;
