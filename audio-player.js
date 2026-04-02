@@ -199,18 +199,21 @@
 
   // ─── BUILD UI ────────────────────────────────────────────────────────────────
 
-  const style = document.createElement('style');
-  style.textContent = `
+  // Prevent duplicate style insertion
+  if (!document.getElementById('ftf-player-styles')) {
+    const style = document.createElement('style');
+    style.id = 'ftf-player-styles';
+    style.textContent = `
     #ftf-player {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 9999;
-      background: #0e0c09;
-      border-top: 1px solid #3a3020;
+      z-index: 999;
+      background: #0a0907;
+      border-top: 1px solid #2a2418;
       font-family: 'Source Serif 4', 'Georgia', serif;
-      box-shadow: 0 -4px 24px rgba(0,0,0,0.6);
+      color: #c8a96e;
       transition: transform 0.3s ease;
     }
     #ftf-player.collapsed {
@@ -230,56 +233,36 @@
       background: #0a0907;
       border-bottom: 1px solid #2a2418;
       cursor: pointer;
-      user-select: none;
-    }
-    #ftf-collapse-bar:hover {
-      background: #131109;
     }
     #ftf-bar-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     #ftf-bar-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
+      background: #b85e28;
       border-radius: 50%;
-      background: #c8a96e;
-      opacity: 0;
-      flex-shrink: 0;
-      transition: opacity 0.3s;
+      animation: pulse 2s infinite;
     }
-    #ftf-bar-dot.on {
-      opacity: 1;
-      animation: ftf-pulse 0.8s ease-in-out infinite;
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
-    @keyframes ftf-pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.6); }
+    #ftf-bar-section {
+      font-family: 'Inconsolata', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #a09070;
     }
     #ftf-bar-title {
       font-size: 12px;
       color: #c8a96e;
-      font-family: 'Playfair Display', 'Georgia', serif;
-      font-style: italic;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 480px;
-    }
-    #ftf-bar-section {
-      font-size: 11px;
-      color: #5a4e38;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      white-space: nowrap;
+      font-weight: 500;
     }
     #ftf-collapse-toggle {
-      font-size: 11px;
-      color: #5a4e38;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
       background: transparent;
       border: none;
       cursor: pointer;
@@ -292,70 +275,36 @@
     }
     #ftf-seg-info {
       display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 6px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 12px;
     }
-    #ftf-seg-section {
-      font-size: 10px;
-      font-family: 'Source Serif 4', 'Georgia', serif;
-      color: #6a5030;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      white-space: nowrap;
+    #ftf-seg-text {
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.4;
+      color: #c8a96e;
     }
     #ftf-seg-title {
-      font-size: 14px;
-      font-family: 'Playfair Display', 'Georgia', serif;
-      color: #e0d0b0;
-      font-style: italic;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
     }
-    #ftf-seg-counter {
-      font-size: 10px;
-      color: #4a4030;
-      white-space: nowrap;
-      margin-left: auto;
-    }
-    #ftf-narration {
-      font-size: 12.5px;
-      font-family: 'Source Serif 4', 'Georgia', serif;
+    #ftf-seg-desc {
+      font-size: 12px;
       color: #a09070;
-      line-height: 1.55;
-      margin-bottom: 8px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
     }
-    #ftf-controls-row {
+    #ftf-controls {
       display: flex;
       align-items: center;
       gap: 8px;
+      margin-bottom: 8px;
     }
-    #ftf-prog-track {
-      flex: 1;
-      height: 3px;
-      background: #2a2010;
-      border-radius: 2px;
-      cursor: pointer;
-      position: relative;
-    }
-    #ftf-prog-fill {
-      height: 100%;
-      background: #c8a96e;
-      border-radius: 2px;
-      width: 0%;
-      transition: width 0.4s linear;
-      pointer-events: none;
-    }
-    .ftf-btn {
-      background: transparent;
-      border: 1px solid #2e2415;
-      color: #7a6040;
-      border-radius: 4px;
+    #ftf-btn-play, #ftf-btn-pause, #ftf-btn-stop {
+      background: #2a2418;
+      border: 1px solid #4a4030;
+      color: #c8a96e;
       cursor: pointer;
       font-size: 11px;
       font-family: 'Source Serif 4', 'Georgia', serif;
@@ -421,6 +370,7 @@
     body { padding-bottom: 60px; }
   `;
   document.head.appendChild(style);
+  }
 
   const player = document.createElement('div');
   player.id = 'ftf-player';
@@ -543,8 +493,10 @@
       'Pangaea': 'Pan-gee-ah',
       'craton': 'cray-tahn',
       'Iapetus': 'Eye-ap-it-us',
-      'Orogeny': 'Ore-ig-any',
-      'Saprolite': 'Sap-ruh-lahyt'
+      'Orogeny': 'aw-RAA-juh-nee',
+      'Saprolite': 'Sap-ruh-lahyt',
+      'Rodinia': 'ro-DIN-ee-uh',
+      'Laurentia': 'law-REN-shee-uh'
     };
 
     // Create phonetic version for speech synthesis
